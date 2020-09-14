@@ -1,20 +1,18 @@
-import * as firebase from 'firebase';
-import 'firebase/auth';
-import 'firebase/firestore';
+import firebase from './../../firebase';
 
 class authService {
   loginUser(email: string, password: string) {
-    return firebase.default.auth().signInWithEmailAndPassword(email, password);
+    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
   signupUser(email: string, password: string, name: string) {
-    return firebase.default
+    return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((newUserCredential: firebase.auth.UserCredential) => {
         firebase
           .firestore()
-          .doc(`/userProfile/${newUserCredential.user.uid}`)
+          .doc(`/userProfile/${newUserCredential.user.uid}/profile/info`)
           .set({email, name});
       })
       .catch((error) => {
@@ -24,7 +22,7 @@ class authService {
   }
 
   logoutUser() {
-    return firebase.default.auth().signOut();
+    return firebase.auth().signOut();
   }
 }
 

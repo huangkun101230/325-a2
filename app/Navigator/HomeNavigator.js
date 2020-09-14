@@ -36,8 +36,8 @@ const HomeNavigator = () => {
         activeTintColor: colors.primary,
         inactiveTintColor: colors.gray,
       }}>
-      <HomeStack.Screen name="ProfileScreen" component={ProfileScreen} />
       <HomeStack.Screen name="ListScreen" component={ListScreen} />
+      <HomeStack.Screen name="ProfileScreen" component={ProfileScreen} />
     </HomeStack.Navigator>
   );
 };
