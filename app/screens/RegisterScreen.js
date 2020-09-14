@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 
-import AuthService from './../services/users/auth';
+import AuthService from './../services/users/auth.services';
 
 class RegisterScreen extends React.Component {
     constructor() {

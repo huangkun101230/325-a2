@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
-import ProfileService from './../services/users/profile';
-import AuthService from './../services/users/auth';
+import ProfileService from './../services/users/profile.services';
+import AuthService from '../services/users/auth.services';
 
 class ProfileScreen extends React.Component {
   constructor() {
@@ -45,13 +45,17 @@ class ProfileScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.container}>
-          <Text>{this.state.displayName}</Text>
+      <View style={cusStyles.container}>
+        <View>
+          <Text style={cusStyles.displayName}>
+            {`Welcome,\n\n${this.state.displayName}`}
+          </Text>
         </View>
 
-        <View style={(styles.container, {flex: 1})}>
-          <TouchableOpacity style={styles.button} onPress={this.handleLogoff}>
+        <View>
+          <TouchableOpacity
+            style={cusStyles.button}
+            onPress={this.handleLogoff}>
             <Text style={styles.buttonText}>Sign out</Text>
           </TouchableOpacity>
         </View>
@@ -59,5 +63,28 @@ class ProfileScreen extends React.Component {
     );
   }
 }
+
+const cusStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.backgroundColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  displayName: {
+    fontSize: 25,
+    fontWeight: '800',
+  },
+  button: {
+    marginTop: 32,
+    marginHorizontal: 45,
+    backgroundColor: colors.red,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300,
+  },
+});
 
 export default ProfileScreen;

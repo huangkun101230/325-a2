@@ -5,9 +5,7 @@ class profileService {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user;
-        this.userProfile = firebase
-          .firestore()
-          .doc(`/userProfile/${user.uid}/profile/info`);
+        this.userProfile = firebase.firestore().doc(`/userProfile/${user.uid}`);
       }
     });
   }

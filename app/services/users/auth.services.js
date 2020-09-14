@@ -1,4 +1,4 @@
-import firebase from './../../firebase';
+import firebase from '../../firebase';
 
 class authService {
   loginUser(email: string, password: string) {
@@ -12,7 +12,7 @@ class authService {
       .then((newUserCredential: firebase.auth.UserCredential) => {
         firebase
           .firestore()
-          .doc(`/userProfile/${newUserCredential.user.uid}/profile/info`)
+          .doc(`/userProfile/${newUserCredential.user.uid}`)
           .set({email, name});
       })
       .catch((error) => {

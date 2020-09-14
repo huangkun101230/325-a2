@@ -1,17 +1,25 @@
 import React from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View, StyleSheet} from 'react-native';
 import colors from '../configs/colors';
-import styles from '../configs/styles';
 
 class LoadingScreen extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View style={cusStyles.container}>
         <Text>Loading...</Text>
         <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
 }
+
+const cusStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.backgroundColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default LoadingScreen;

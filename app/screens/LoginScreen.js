@@ -5,7 +5,10 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 
-import AuthService from './../services/users/auth';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faGoogle} from '@fortawesome/free-brands-svg-icons';
+
+import AuthService from './../services/users/auth.services';
 
 class LoginScreen extends React.Component {
     constructor() {
@@ -70,7 +73,8 @@ class LoginScreen extends React.Component {
                         <View style={{ backgroundColor: colors.gray, height: 1, flex: 1, alignSelf: 'center' }} />
                     </View>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={[styles.button, {flexDirection:'row', alignItems:'center'}]}>
+                        <FontAwesomeIcon icon={faGoogle} color={colors.white} size={24} style={{alignSelf: 'flex-start', marginRight: 25}} />
                         <Text style={styles.buttonText}>Continue with Google</Text>
                     </TouchableOpacity>
                 </View>

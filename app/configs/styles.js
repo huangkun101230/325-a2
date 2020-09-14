@@ -5,8 +5,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   homeScreenImage: {
     width: undefined,
@@ -35,5 +33,39 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F5FCFF88',
+  },
+  header: {
+    paddingTop: 64,
+    paddingBottom: 16,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: colors.backgroundColor,
+    shadowOffset: {height: 5},
+    shadowRadius: 15,
+    shadowOpacity: 0.2,
+    zIndex: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  list: {
+    marginHorizontal: 16,
+  },
+  listItem: {
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    padding: 8,
+    // flexDirection: 'row',
+    marginVertical: 8,
+  },
+  courseCode: {
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  assiTitle: {
+    fontSize: 16,
+    marginTop: 4,
   },
 });
