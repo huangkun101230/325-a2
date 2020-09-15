@@ -15,6 +15,9 @@ import styles from '../configs/styles';
 import EventService from '../services/events/event.services';
 import TimePicker from '../components/timePicker';
 
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMicrophone} from '@fortawesome/free-solid-svg-icons';
+
 class PostScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -144,6 +147,26 @@ class PostScreen extends React.Component {
               title="Save"
               onPress={this.saveBoard}
             />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {flexDirection: 'row', alignItems: 'center'},
+              ]}
+              onPress={() =>
+                this.props.navigation.navigate('VoiceRecognitionScreen')
+              }>
+              <FontAwesomeIcon
+                icon={faMicrophone}
+                color={colors.white}
+                size={24}
+                style={{alignSelf: 'flex-start', marginRight: 25}}
+              />
+              <Text style={styles.buttonText}>Voice Recognization</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
 

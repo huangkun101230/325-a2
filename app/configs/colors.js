@@ -8,4 +8,5 @@ export default {
   input: '#161F3D',
   addButtonCOlor: '#E9446A',
   shadow: '#454d65',
+  yellow: '#f5dd4b',
 };
