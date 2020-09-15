@@ -56,6 +56,14 @@ class ListScreen extends React.Component {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
+  // fix Warning: Can't perform a React state update on an unmounted component
+  //return null when escapse component, it will no longer hold any data in memory
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   renderList = (list) => {
     return (
       <TouchableOpacity
