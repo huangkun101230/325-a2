@@ -12,13 +12,12 @@ import {
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
-import LoadingScreen from './../screens/LoadingScreen';
 import EventService from '../services/events/event.services';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import TimePicker from '../components/timePicker';
 
 class PostScreen extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.ref = EventService.getEventList();
     this.state = {
       courseCode: '',
@@ -26,7 +25,9 @@ class PostScreen extends React.Component {
       description: '',
       startTime: '',
       dueTime: '',
+      currentPickerTitle: '',
       isLoading: false,
+      isVisible: false,
     };
   }
   updateTextInput = (text, field) => {
@@ -66,6 +67,19 @@ class PostScreen extends React.Component {
       });
   };
 
+  //show the time picker
+  toggleShow = () => {
+    this.setState((state) => ({isVisible: !state.isVisible}));
+  };
+
+  getDate = (date) => {
+    if (this.state.currentPickerTitle === 'Start Date') {
+      this.setState((state) => ({startTime: date}));
+    } else {
+      this.setState((state) => ({dueTime: date}));
+    }
+  };
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -74,6 +88,7 @@ class PostScreen extends React.Component {
         </View>
       );
     }
+
     return (
       <SafeAreaView style={{flex: 1}}>
         <ScrollView style={cusStyles.container}>
@@ -102,6 +117,26 @@ class PostScreen extends React.Component {
             />
           </View>
 
+          <View style={cusStyles.subContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleShow();
+                this.setState((state) => ({currentPickerTitle: 'Start Date'}));
+              }}>
+              <Text>Start Date: {this.state.startTime}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={cusStyles.subContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleShow();
+                this.setState((state) => ({currentPickerTitle: 'Due Date'}));
+              }}>
+              <Text>Due Date: {this.state.dueTime}</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={cusStyles.button}>
             <Button
               large
@@ -111,6 +146,17 @@ class PostScreen extends React.Component {
             />
           </View>
         </ScrollView>
+
+        <View>
+          {this.state.isVisible ? (
+            <TimePicker
+              pickerTitle={this.state.currentPickerTitle}
+              toggleShow={this.toggleShow} //passing the function to the child
+              onRef={(ref) => (this.parentReference = ref)}
+              parentReference={this.getDate.bind(this)}
+            />
+          ) : null}
+        </View>
       </SafeAreaView>
     );
   }
