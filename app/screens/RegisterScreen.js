@@ -4,6 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
+import Loading from './../components/loading';
 
 import AuthService from './../services/users/auth.services';
 
@@ -15,15 +16,20 @@ class RegisterScreen extends React.Component {
             password: '',
             name: '',
             errorMessage: null,
+            isLoading: false,
         };
     }
 
     handleSignup = () => {
         const { email, password, name } = this.state;
-        AuthService.signupUser(email, password, name).catch(error => this.setState({ errorMessage: error.message }));
+        AuthService.signupUser(email, password, name).catch(error => this.setState({ errorMessage: error.message, isLoading: false }));
     }
 
     render() {
+        if (this.state.isLoading) {
+            <Loading />;
+        }
+
         return (
             <View style={cusStyles.container}>
                 <Text style={cusStyles.greeting}>{'Hello!\nSign up to get started.'}</Text>
@@ -66,7 +72,10 @@ class RegisterScreen extends React.Component {
                         />
                     </View>
 
-                    <TouchableOpacity style={styles.button} onPress={this.handleSignup}>
+                    <TouchableOpacity style={styles.button} onPress={() => {
+                        this.handleSignup();
+                        this.setState((state) => ({ isLoading: true }));
+                    }}>
                         <Text style={styles.buttonText}>Sign up</Text>
                     </TouchableOpacity>
 

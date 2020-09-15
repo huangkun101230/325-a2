@@ -14,6 +14,7 @@ import colors from '../configs/colors';
 import styles from '../configs/styles';
 import EventService from '../services/events/event.services';
 import TimePicker from '../components/timePicker';
+import Loading from './../components/loading';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMicrophone} from '@fortawesome/free-solid-svg-icons';
@@ -85,11 +86,7 @@ class PostScreen extends React.Component {
 
   render() {
     if (this.state.isLoading) {
-      return (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      );
+      <Loading />;
     }
 
     return (
