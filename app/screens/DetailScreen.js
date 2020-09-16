@@ -3,12 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  Button,
   ActivityIndicator,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 
 import colors from '../configs/colors';
@@ -44,7 +41,9 @@ class DetailScreen extends React.Component {
   }
 
   handleEdit = () => {
-    this.props.navigation.navigate('EditScreen');
+    this.props.navigation.navigate('EditScreen', {
+      itemKey: this.state.key,
+    });
   };
 
   handleRemove = () => {
@@ -86,12 +85,12 @@ class DetailScreen extends React.Component {
             </View>
             <View>
               <Text style={[styles.time, {fontSize: 20, marginBottom: 8}]}>
-                Start Time: {this.state.event.startTime}
+                Start Time: {this.state.event.displayStartTime}
               </Text>
             </View>
             <View>
               <Text style={[styles.time, {fontSize: 20}]}>
-                Due Time: {this.state.event.dueTime}
+                Due Time: {this.state.event.displayDueTime}
               </Text>
             </View>
           </View>

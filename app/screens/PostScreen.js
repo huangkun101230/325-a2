@@ -13,6 +13,7 @@ import styles from '../configs/styles';
 import EventService from '../services/events/event.services';
 import TimePicker from '../components/timePicker';
 import Loading from './../components/loading';
+import moment from 'moment';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -40,6 +41,8 @@ class PostScreen extends React.Component {
       description: '',
       startTime: '',
       dueTime: '',
+      displayStartTime: '',
+      displayDueTime: '',
       currentPickerTitle: '',
       color: this.backgroundColors[0],
       isLoading: false,
@@ -54,6 +57,8 @@ class PostScreen extends React.Component {
       description: '',
       startTime: '',
       dueTime: '',
+      displayStartTime: '',
+      displayDueTime: '',
       isLoading: false,
     });
   }
@@ -87,6 +92,8 @@ class PostScreen extends React.Component {
         description: this.state.description,
         startTime: this.state.startTime,
         dueTime: this.state.dueTime,
+        displayStartTime: this.state.displayStartTime,
+        displayDueTime: this.state.displayDueTime,
         color: this.state.color,
       })
       .then((docRef) => {
@@ -96,6 +103,8 @@ class PostScreen extends React.Component {
           description: '',
           startTime: '',
           dueTime: '',
+          displayStartTime: '',
+          displayDueTime: '',
           color: '',
           isLoading: false,
         });
@@ -111,16 +120,28 @@ class PostScreen extends React.Component {
   };
 
   //show the time picker
-  toggleShow = () => {
+  togglePickerShow = () => {
     this.setState((state) => ({isVisible: !state.isVisible}));
   };
 
+  //get date returned from time picker component
   getDate = (date) => {
+    const formattedDate = this.formatDate(date);
     if (this.state.currentPickerTitle === 'Start Date') {
-      this.setState((state) => ({startTime: date}));
+      this.setState((state) => ({
+        startTime: date,
+        displayStartTime: formattedDate,
+      }));
     } else {
-      this.setState((state) => ({dueTime: date}));
+      this.setState((state) => ({
+        dueTime: date,
+        displayDueTime: formattedDate,
+      }));
     }
+  };
+
+  formatDate = (date) => {
+    return moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
   };
 
   render() {
@@ -195,7 +216,7 @@ class PostScreen extends React.Component {
             <TouchableOpacity
               style={[styles.input, {borderColor: this.state.color}]}
               onPress={() => {
-                this.toggleShow();
+                this.togglePickerShow();
                 this.setState((state) => ({
                   currentPickerTitle: 'Start Date',
                 }));
@@ -203,19 +224,23 @@ class PostScreen extends React.Component {
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
                 Start Date
               </Text>
-              <Text style={cusStyles.timeText}>{this.state.startTime}</Text>
+              <Text style={cusStyles.timeText}>
+                {this.state.displayStartTime}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.input, {borderColor: this.state.color}]}
               onPress={() => {
-                this.toggleShow();
+                this.togglePickerShow();
                 this.setState((state) => ({currentPickerTitle: 'Due Date'}));
               }}>
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
                 Due Date
               </Text>
-              <Text style={cusStyles.timeText}>{this.state.dueTime}</Text>
+              <Text style={cusStyles.timeText}>
+                {this.state.displayDueTime}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -260,7 +285,7 @@ class PostScreen extends React.Component {
           {this.state.isVisible ? (
             <TimePicker
               pickerTitle={this.state.currentPickerTitle}
-              toggleShow={this.toggleShow} //passing the function to the child
+              toggleShow={this.togglePickerShow} //passing the function to the child
               onRef={(ref) => (this.parentReference = ref)}
               parentReference={this.getDate.bind(this)}
             />

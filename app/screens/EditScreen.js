@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   StyleSheet,
@@ -5,20 +6,318 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  SafeAreaView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
+import Loading from './../components/loading';
+import TimePicker from '../components/timePicker';
+import moment from 'moment';
 import EventService from '../services/events/event.services';
 
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMicrophone, faClone} from '@fortawesome/free-solid-svg-icons';
+
 class EditScreen extends React.Component {
+  constructor() {
+    super();
+    this.backgroundColors = [
+      '#5cd859',
+      '#24a6d9',
+      '#595bd9',
+      '#8022d9',
+      '#d159d8',
+      '#d85963',
+      '#d88559',
+    ];
+    this.state = {
+      courseCode: '',
+      assiTitle: '',
+      description: '',
+      startTime: '',
+      dueTime: '',
+      displayStartTime: '',
+      displayDueTime: '',
+      currentPickerTitle: '',
+      color: this.backgroundColors[0],
+      isLoading: true,
+      isVisible: false,
+      key: '',
+    };
+  }
+
+  resetState() {
+    this.setState({
+      courseCode: '',
+      assiTitle: '',
+      description: '',
+      startTime: '',
+      dueTime: '',
+      displayStartTime: '',
+      displayDueTime: '',
+      isLoading: true,
+    });
+  }
+
+  renderColors() {
+    return this.backgroundColors.map((color) => {
+      return (
+        <TouchableOpacity
+          key={color}
+          style={[cusStyles.colorSelect, {backgroundColor: color}]}
+          onPress={() => this.setState({color})}
+        />
+      );
+    });
+  }
+
+  //show the time picker
+  togglePickerShow = () => {
+    this.setState((state) => ({isVisible: !state.isVisible}));
+  };
+
+  //get date returned from time picker component
+  getDate = (date) => {
+    const formattedDate = this.formatDate(date);
+    if (this.state.currentPickerTitle === 'Start Date') {
+      this.setState((state) => ({
+        startTime: date,
+        displayStartTime: formattedDate,
+      }));
+    } else {
+      this.setState((state) => ({
+        dueTime: date,
+        displayDueTime: formattedDate,
+      }));
+    }
+  };
+
+  formatDate = (date) => {
+    return moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
+  };
+
+  componentDidMount() {
+    const itemKey = this.props.route.params.itemKey;
+    EventService.getEventDetail(itemKey)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          const event = doc.data();
+          this.setState({
+            courseCode: event.courseCode,
+            assiTitle: event.assiTitle,
+            description: event.description,
+            startTime: event.startTime,
+            dueTime: event.dueTime,
+            displayStartTime: event.displayStartTime,
+            displayDueTime: event.displayDueTime,
+            color: event.color,
+            key: doc.id,
+            isLoading: false,
+          });
+        } else {
+          console.log('No such document!');
+        }
+      });
+  }
+
+  updateTextInput = (text, field) => {
+    const state = this.state;
+    state[field] = text;
+    this.setState(state);
+  };
+
+  updateTask() {
+    this.setState({
+      isLoading: true,
+    });
+    // const {navigation} = this.props;
+    const updateRef = EventService.getEventDetail(this.state.key);
+    updateRef
+      .set({
+        courseCode: this.state.courseCode,
+        assiTitle: this.state.assiTitle,
+        description: this.state.description,
+        startTime: this.state.startTime,
+        dueTime: this.state.dueTime,
+        displayStartTime: this.state.displayStartTime,
+        displayDueTime: this.state.displayDueTime,
+        color: this.state.color,
+      })
+      .then((docRef) => {
+        this.resetState();
+        this.props.navigation.navigate('ListScreen');
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+        this.setState((state) => ({
+          isLoading: false,
+        }));
+      });
+  }
+
   render() {
+    if (this.state.isLoading) {
+      <Loading />;
+    }
+
     return (
-      <View style={styles.container}>
-        <Text>Edit Screen</Text>
-      </View>
+      <KeyboardAvoidingView style={styles.centerContainer} behavior="padding">
+        <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
+          <Text style={cusStyles.title}>Modify Your Task</Text>
+
+          <View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                placeholder={'Course Code'}
+                autoCapitalize="characters"
+                value={this.state.courseCode}
+                onChangeText={(text) =>
+                  this.updateTextInput(text, 'courseCode')
+                }
+                style={[styles.input, {borderColor: this.state.color}]}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                placeholder={'Task Title'}
+                value={this.state.assiTitle}
+                onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
+                style={[styles.input, {borderColor: this.state.color}]}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                placeholder={'Description'}
+                value={this.state.description}
+                onChangeText={(text) =>
+                  this.updateTextInput(text, 'description')
+                }
+                style={[styles.input, {borderColor: this.state.color}]}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[styles.input, {borderColor: this.state.color}]}
+              onPress={() => {
+                this.togglePickerShow();
+                this.setState((state) => ({
+                  currentPickerTitle: 'Start Date',
+                }));
+              }}>
+              <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
+                Start Date
+              </Text>
+              <Text style={cusStyles.timeText}>
+                {this.state.displayStartTime}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.input, {borderColor: this.state.color}]}
+              onPress={() => {
+                this.togglePickerShow();
+                this.setState((state) => ({currentPickerTitle: 'Due Date'}));
+              }}>
+              <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
+                Due Date
+              </Text>
+              <Text style={cusStyles.timeText}>
+                {this.state.displayDueTime}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 12,
+            }}>
+            {this.renderColors()}
+          </View>
+
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: this.state.color}]}
+            onPress={this.updateTask.bind(this)}>
+            <Text style={styles.buttonText}>Update!</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: colors.primary,
+              },
+            ]}
+            onPress={() =>
+              this.props.navigation.navigate('VoiceRecognitionScreen')
+            }>
+            <FontAwesomeIcon
+              icon={faMicrophone}
+              color={colors.white}
+              size={24}
+              style={{marginRight: 25}}
+            />
+            <Text style={styles.buttonText}>Voice Recognization</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View>
+          {this.state.isVisible ? (
+            <TimePicker
+              pickerTitle={this.state.currentPickerTitle}
+              toggleShow={this.togglePickerShow} //passing the function to the child
+              onRef={(ref) => (this.parentReference = ref)}
+              parentReference={this.getDate.bind(this)}
+            />
+          ) : null}
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
+
+const cusStyles = StyleSheet.create({
+  title: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.black,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  colorSelect: {
+    width: 30,
+    height: 30,
+    borderRadius: 4,
+  },
+  timeText: {
+    fontSize: 18,
+  },
+});
 
 export default EditScreen;

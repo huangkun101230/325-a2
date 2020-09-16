@@ -47,6 +47,8 @@ class ListScreen extends React.Component {
         description,
         startTime,
         dueTime,
+        displayStartTime,
+        displayDueTime,
         color,
       } = doc.data();
       events.push({
@@ -57,6 +59,8 @@ class ListScreen extends React.Component {
         description,
         startTime,
         dueTime,
+        displayStartTime,
+        displayDueTime,
         color,
       });
     });
@@ -95,7 +99,7 @@ class ListScreen extends React.Component {
 
         <View style={{alignItems: 'center', marginTop: 130}}>
           <Text style={styles.time}>Due date:</Text>
-          <Text style={styles.time}>{list.dueTime}</Text>
+          <Text style={styles.time}>{list.displayDueTime}</Text>
         </View>
       </TouchableOpacity>
     );

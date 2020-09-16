@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import moment from 'moment';
+// import moment from 'moment';
 
 class timePicker extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class timePicker extends React.Component {
   }
 
   handleConfirm = (date) => {
-    date = moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
+    // date = moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
     this.props.parentReference(date); //passing date back to parent
     this.handleClick();
   };
