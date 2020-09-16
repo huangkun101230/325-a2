@@ -9,4 +9,5 @@ export default {
   addButtonCOlor: '#E9446A',
   shadow: '#454d65',
   yellow: '#f5dd4b',
+  black: '#000000',
 };

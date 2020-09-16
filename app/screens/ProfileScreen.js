@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 import ProfileService from './../services/users/profile.services';
 import AuthService from '../services/users/auth.services';
 
 class ProfileScreen extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.ref = ProfileService.getUserProfile();
     this.unsubscribe = null;
     this.state = {
