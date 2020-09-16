@@ -83,7 +83,7 @@ const HomeNavigator = () => {
         showLabel: false,
       }}>
       <HomeStack.Screen name="ListNavigator" component={ListNavigator} />
-      <HomeStack.Screen name="PostScreen" component={PostScreen} />
+      {/* <HomeStack.Screen name="PostScreen" component={PostScreen} /> */}
       <HomeStack.Screen name="ProfileScreen" component={ProfileScreen} />
     </HomeStack.Navigator>
   );

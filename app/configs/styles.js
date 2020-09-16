@@ -61,11 +61,19 @@ export default StyleSheet.create({
     marginVertical: 8,
   },
   courseCode: {
-    fontSize: 20,
-    fontWeight: '500',
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.white,
+    marginBottom: 8,
   },
   assiTitle: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: colors.white,
+  },
+  time: {
     fontSize: 16,
-    marginTop: 4,
+    fontWeight: '700',
+    color: colors.white,
   },
 });
