@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   StyleSheet,
@@ -5,10 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
-  Button,
-  ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
@@ -17,11 +15,24 @@ import TimePicker from '../components/timePicker';
 import Loading from './../components/loading';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMicrophone} from '@fortawesome/free-solid-svg-icons';
+import {
+  faMicrophone,
+  faTimes,
+  faClone,
+} from '@fortawesome/free-solid-svg-icons';
 
 class PostScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.backgroundColors = [
+      '#5cd859',
+      '#24a6d9',
+      '#595bd9',
+      '#8022d9',
+      '#d159d8',
+      '#d85963',
+      '#d88559',
+    ];
     this.ref = EventService.getEventList();
     this.state = {
       courseCode: '',
@@ -30,10 +41,35 @@ class PostScreen extends React.Component {
       startTime: '',
       dueTime: '',
       currentPickerTitle: '',
+      color: this.backgroundColors[0],
       isLoading: false,
       isVisible: false,
     };
   }
+
+  resetState() {
+    this.setState({
+      courseCode: '',
+      assiTitle: '',
+      description: '',
+      startTime: '',
+      dueTime: '',
+      isLoading: false,
+    });
+  }
+
+  renderColors() {
+    return this.backgroundColors.map((color) => {
+      return (
+        <TouchableOpacity
+          key={color}
+          style={[cusStyles.colorSelect, {backgroundColor: color}]}
+          onPress={() => this.setState({color})}
+        />
+      );
+    });
+  }
+
   updateTextInput = (text, field) => {
     const state = this.state;
     state[field] = text;
@@ -51,6 +87,7 @@ class PostScreen extends React.Component {
         description: this.state.description,
         startTime: this.state.startTime,
         dueTime: this.state.dueTime,
+        color: this.state.color,
       })
       .then((docRef) => {
         this.setState({
@@ -59,9 +96,11 @@ class PostScreen extends React.Component {
           description: '',
           startTime: '',
           dueTime: '',
+          color: '',
           isLoading: false,
         });
-        this.props.navigation.navigate('ListScreen');
+        this.resetState(); //reset the state elements
+        this.props.closeModal(); //close this modal
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
@@ -90,82 +129,138 @@ class PostScreen extends React.Component {
     }
 
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView style={cusStyles.container}>
-          <View style={cusStyles.subContainer}>
-            <TextInput
-              placeholder={'Course Code'}
-              autoCapitalize="characters"
-              value={this.state.title}
-              onChangeText={(text) => this.updateTextInput(text, 'courseCode')}
-            />
-          </View>
-          <View style={cusStyles.subContainer}>
-            <TextInput
-              placeholder={'Title'}
-              value={this.state.title}
-              onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
-            />
-          </View>
-          <View style={cusStyles.subContainer}>
-            <TextInput
-              multiline={true}
-              numberOfLines={4}
-              placeholder={'Description'}
-              value={this.state.description}
-              onChangeText={(text) => this.updateTextInput(text, 'description')}
-            />
-          </View>
+      <KeyboardAvoidingView style={styles.centerContainer} behavior="padding">
+        <TouchableOpacity
+          style={{position: 'absolute', top: 64, right: 32}}
+          onPress={this.props.closeModal}>
+          <FontAwesomeIcon icon={faTimes} color={colors.black} size={24} />
+        </TouchableOpacity>
 
-          <View style={cusStyles.subContainer}>
+        <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
+          <Text style={cusStyles.title}>Create Task List</Text>
+
+          <View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                placeholder={'Course Code'}
+                autoCapitalize="characters"
+                value={this.state.title}
+                onChangeText={(text) =>
+                  this.updateTextInput(text, 'courseCode')
+                }
+                style={styles.input}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                placeholder={'Task Title'}
+                value={this.state.title}
+                onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
+                style={styles.input}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                placeholder={'Description'}
+                value={this.state.description}
+                onChangeText={(text) =>
+                  this.updateTextInput(text, 'description')
+                }
+                style={styles.input}
+              />
+              <FontAwesomeIcon
+                icon={faClone}
+                size={32}
+                color={this.state.color}
+                style={{position: 'absolute', right: -28, top: 18}}
+              />
+            </View>
+
             <TouchableOpacity
+              style={styles.input}
               onPress={() => {
                 this.toggleShow();
-                this.setState((state) => ({currentPickerTitle: 'Start Date'}));
+                this.setState((state) => ({
+                  currentPickerTitle: 'Start Date',
+                }));
               }}>
-              <Text>Start Date: {this.state.startTime}</Text>
+              <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
+                Start Date
+              </Text>
+              <Text style={cusStyles.timeText}>{this.state.startTime}</Text>
             </TouchableOpacity>
-          </View>
 
-          <View style={cusStyles.subContainer}>
             <TouchableOpacity
+              style={styles.input}
               onPress={() => {
                 this.toggleShow();
                 this.setState((state) => ({currentPickerTitle: 'Due Date'}));
               }}>
-              <Text>Due Date: {this.state.dueTime}</Text>
+              <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
+                Due Date
+              </Text>
+              <Text style={cusStyles.timeText}>{this.state.dueTime}</Text>
             </TouchableOpacity>
           </View>
 
-          <View style={cusStyles.button}>
-            <Button
-              large
-              // leftIcon={{ name: 'save' }}
-              title="Save"
-              onPress={this.saveBoard}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 12,
+            }}>
+            {this.renderColors()}
+          </View>
+
+          <TouchableOpacity
+            style={[
+              cusStyles.createButton,
+              {backgroundColor: this.state.color},
+            ]}
+            onPress={this.saveBoard}>
+            <Text style={{color: colors.white, fontWeight: '600'}}>
+              Create!
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              // styles.button,
+              cusStyles.createButton,
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: colors.primary,
+              },
+            ]}
+            onPress={() =>
+              this.props.navigation.navigate('VoiceRecognitionScreen')
+            }>
+            <FontAwesomeIcon
+              icon={faMicrophone}
+              color={colors.white}
+              size={24}
+              style={{marginRight: 25}}
             />
-          </View>
-
-          <View>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {flexDirection: 'row', alignItems: 'center'},
-              ]}
-              onPress={() =>
-                this.props.navigation.navigate('VoiceRecognitionScreen')
-              }>
-              <FontAwesomeIcon
-                icon={faMicrophone}
-                color={colors.white}
-                size={24}
-                style={{alignSelf: 'flex-start', marginRight: 25}}
-              />
-              <Text style={styles.buttonText}>Voice Recognization</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+            <Text style={styles.buttonText}>Voice Recognization</Text>
+          </TouchableOpacity>
+        </View>
 
         <View>
           {this.state.isVisible ? (
@@ -177,36 +272,33 @@ class PostScreen extends React.Component {
             />
           ) : null}
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }
 
 const cusStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30,
+  title: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.black,
+    alignSelf: 'center',
+    marginBottom: 16,
   },
-  subContainer: {
-    flex: 1,
-    marginBottom: 20,
-    padding: 5,
-    borderBottomWidth: 2,
-    borderBottomColor: '#CCCCCC',
-  },
-  inputTitle: {
-    color: colors.gray,
-    fontSize: 10,
-    textTransform: 'uppercase',
-  },
-  activity: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
+  createButton: {
+    marginTop: 24,
+    height: 50,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  colorSelect: {
+    width: 30,
+    height: 30,
+    borderRadius: 4,
+  },
+  timeText: {
+    fontSize: 18,
   },
 });
 

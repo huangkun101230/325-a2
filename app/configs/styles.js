@@ -6,6 +6,12 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundColor,
   },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.backgroundColor,
+  },
   homeScreenImage: {
     width: undefined,
     height: undefined,
@@ -68,12 +74,22 @@ export default StyleSheet.create({
   },
   assiTitle: {
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: '600',
     color: colors.white,
   },
   time: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
     color: colors.white,
+  },
+  input: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.primary,
+    borderRadius: 6,
+    height: 50,
+    width: 340,
+    marginTop: 8,
+    paddingHorizontal: 16,
+    fontSize: 18,
   },
 });

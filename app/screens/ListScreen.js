@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   StyleSheet,
@@ -10,14 +11,16 @@ import {
   ListItem,
   ActivityIndicator,
   FlatList,
+  Modal,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 import Title from '../components/title';
+import PostScreen from './PostScreen';
 import EventService from '../services/events/event.services';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlusSquare, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
 class ListScreen extends React.Component {
   constructor() {
@@ -27,7 +30,12 @@ class ListScreen extends React.Component {
     this.state = {
       events: [],
       isLoading: true,
+      addTodoVisible: false,
     };
+  }
+
+  toggleAddTodoModal() {
+    this.setState((state) => ({addTodoVisible: !state.addTodoVisible}));
   }
 
   onCollectionUpdate = async (querySnapshot) => {
@@ -39,6 +47,7 @@ class ListScreen extends React.Component {
         description,
         startTime,
         dueTime,
+        color,
       } = doc.data();
       events.push({
         key: doc.id,
@@ -48,6 +57,7 @@ class ListScreen extends React.Component {
         description,
         startTime,
         dueTime,
+        color,
       });
     });
     this.setState({
@@ -71,10 +81,7 @@ class ListScreen extends React.Component {
   renderList = (list) => {
     return (
       <TouchableOpacity
-        style={[
-          cusStyles.listContainer,
-          {backgroundColor: colors.addButtonCOlor},
-        ]}
+        style={[cusStyles.listContainer, {backgroundColor: list.color}]}
         onPress={() => {
           this.props.navigation.navigate('DetailScreen', {
             itemKey: list.key,
@@ -105,24 +112,27 @@ class ListScreen extends React.Component {
 
     return (
       <View style={cusStyles.container}>
-        {/* <View style={styles.header}>
-          <Text style={styles.headerTitle}>Assignment</Text>
-        </View> */}
-        <Title />
+        <Modal
+          animationType="slide"
+          visible={this.state.addTodoVisible}
+          onRequestClose={() => this.toggleAddTodoModal()}>
+          <PostScreen closeModal={() => this.toggleAddTodoModal()} />
+        </Modal>
 
+        <Title />
         <View style={{marginVertical: 48}}>
-          <TouchableOpacity style={cusStyles.addList}>
+          <TouchableOpacity
+            style={cusStyles.addList}
+            onPress={() => this.toggleAddTodoModal()}>
             <FontAwesomeIcon
               icon={faPlus}
               color={colors.secondary}
               size={16}
-              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 shadowColor: colors.primary,
                 shadowOffset: {width: 0, height: 0},
                 shadowRadius: 10,
                 shadowOpacity: 0.3,
-                // backgroundColor: colors.primary,
               }}
             />
           </TouchableOpacity>
@@ -137,12 +147,6 @@ class ListScreen extends React.Component {
             renderItem={({item}) => this.renderList(item)}
           />
         </View>
-
-        {/* <FlatList
-          style={styles.list}
-          data={this.state.events}
-          renderItem={({item}) => this.renderList(item)}
-        /> */}
       </View>
     );
   }
