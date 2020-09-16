@@ -148,7 +148,7 @@ class PostScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'courseCode')
                 }
-                style={styles.input}
+                style={[styles.input, {borderColor: this.state.color}]}
               />
               <FontAwesomeIcon
                 icon={faClone}
@@ -163,7 +163,7 @@ class PostScreen extends React.Component {
                 placeholder={'Task Title'}
                 value={this.state.title}
                 onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
-                style={styles.input}
+                style={[styles.input, {borderColor: this.state.color}]}
               />
               <FontAwesomeIcon
                 icon={faClone}
@@ -182,7 +182,7 @@ class PostScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'description')
                 }
-                style={styles.input}
+                style={[styles.input, {borderColor: this.state.color}]}
               />
               <FontAwesomeIcon
                 icon={faClone}
@@ -193,7 +193,7 @@ class PostScreen extends React.Component {
             </View>
 
             <TouchableOpacity
-              style={styles.input}
+              style={[styles.input, {borderColor: this.state.color}]}
               onPress={() => {
                 this.toggleShow();
                 this.setState((state) => ({
@@ -207,7 +207,7 @@ class PostScreen extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.input}
+              style={[styles.input, {borderColor: this.state.color}]}
               onPress={() => {
                 this.toggleShow();
                 this.setState((state) => ({currentPickerTitle: 'Due Date'}));
@@ -229,20 +229,14 @@ class PostScreen extends React.Component {
           </View>
 
           <TouchableOpacity
-            style={[
-              cusStyles.createButton,
-              {backgroundColor: this.state.color},
-            ]}
+            style={[styles.button, {backgroundColor: this.state.color}]}
             onPress={this.saveBoard}>
-            <Text style={{color: colors.white, fontWeight: '600'}}>
-              Create!
-            </Text>
+            <Text style={styles.buttonText}>Create!</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[
-              // styles.button,
-              cusStyles.createButton,
+              styles.button,
               {
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -284,13 +278,6 @@ const cusStyles = StyleSheet.create({
     color: colors.black,
     alignSelf: 'center',
     marginBottom: 16,
-  },
-  createButton: {
-    marginTop: 24,
-    height: 50,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   colorSelect: {
     width: 30,

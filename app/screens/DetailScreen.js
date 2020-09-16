@@ -8,6 +8,7 @@ import {
   Button,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 
 import colors from '../configs/colors';
@@ -20,6 +21,7 @@ class DetailScreen extends React.Component {
     this.state = {
       isLoading: true,
       event: {},
+      color: '',
       key: '',
     };
   }
@@ -60,28 +62,36 @@ class DetailScreen extends React.Component {
     }
 
     return (
-      <ScrollView>
-        <View style={styles.container}>
+      <ScrollView
+        style={[styles.container, {backgroundColor: this.state.event.color}]}>
+        <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
           <View style={cusStyles.subContainer}>
             <View>
-              <Text style={styles.courseCode}>
+              <Text
+                style={[styles.courseCode, {fontSize: 36, marginBottom: 16}]}>
                 {this.state.event.courseCode}
               </Text>
             </View>
             <View>
-              <Text style={cusStyles.assiTitle}>
+              <Text
+                style={[styles.assiTitle, {fontSize: 30, marginBottom: 16}]}>
                 {this.state.event.assiTitle}
               </Text>
             </View>
             <View>
-              <Text style={cusStyles.time}>{this.state.event.startTime}</Text>
-            </View>
-            <View>
-              <Text style={cusStyles.time}>{this.state.event.dueTime}</Text>
-            </View>
-            <View>
-              <Text style={cusStyles.description}>
+              <Text
+                style={[styles.description, {fontSize: 24, marginBottom: 16}]}>
                 {this.state.event.description}
+              </Text>
+            </View>
+            <View>
+              <Text style={[styles.time, {fontSize: 20, marginBottom: 8}]}>
+                Start Time: {this.state.event.startTime}
+              </Text>
+            </View>
+            <View>
+              <Text style={[styles.time, {fontSize: 20}]}>
+                Due Time: {this.state.event.dueTime}
               </Text>
             </View>
           </View>

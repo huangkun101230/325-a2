@@ -18,17 +18,16 @@ export default StyleSheet.create({
     flex: 1,
   },
   button: {
-    marginTop: 32,
-    marginHorizontal: 45,
+    marginTop: 24,
+    height: 50,
+    borderRadius: 6,
     backgroundColor: colors.primary,
-    paddingVertical: 12,
-    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     color: colors.white,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   loading: {
     position: 'absolute',
@@ -74,6 +73,11 @@ export default StyleSheet.create({
   },
   assiTitle: {
     fontSize: 20,
+    fontWeight: '600',
+    color: colors.white,
+  },
+  description: {
+    fontSize: 18,
     fontWeight: '600',
     color: colors.white,
   },

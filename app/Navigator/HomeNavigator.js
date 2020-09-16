@@ -35,7 +35,9 @@ const ListNavigator = () => {
       <ListStack.Screen
         name="DetailScreen"
         component={DetailScreen}
-        options={{headerTitle: false}}
+        options={{
+          headerTitle: false,
+        }}
       />
       <ListStack.Screen
         name="EditScreen"
