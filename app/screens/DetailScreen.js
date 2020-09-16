@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Button,
+  Alert,
 } from 'react-native';
 
 import colors from '../configs/colors';
@@ -49,6 +51,22 @@ class DetailScreen extends React.Component {
   handleRemove = () => {
     EventService.removeEvent(this.state.key);
     this.props.navigation.navigate('ListScreen');
+  };
+
+  AlertWindow = () => {
+    Alert.alert(
+      'Warning',
+      'You are going to remove this task',
+      [
+        {
+          text: 'Cancel',
+          // onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => this.handleRemove()},
+      ],
+      {cancelable: false},
+    );
   };
 
   render() {
@@ -104,7 +122,7 @@ class DetailScreen extends React.Component {
           <View style={(styles.container, {flex: 1})}>
             <TouchableOpacity
               style={[styles.button, {backgroundColor: colors.red}]}
-              onPress={this.handleRemove}>
+              onPress={this.AlertWindow}>
               <Text style={styles.buttonText}>Remove</Text>
             </TouchableOpacity>
           </View>

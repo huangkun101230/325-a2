@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 import ProfileService from './../services/users/profile.services';
@@ -37,6 +37,22 @@ class ProfileScreen extends React.Component {
     );
   };
 
+  AlertWindow = () => {
+    Alert.alert(
+      'Warning',
+      'You are going to log off',
+      [
+        {
+          text: 'Cancel',
+          // onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => this.handleLogoff()},
+      ],
+      {cancelable: false},
+    );
+  };
+
   render() {
     return (
       <View style={cusStyles.container}>
@@ -47,9 +63,7 @@ class ProfileScreen extends React.Component {
         </View>
 
         <View>
-          <TouchableOpacity
-            style={cusStyles.button}
-            onPress={this.handleLogoff}>
+          <TouchableOpacity style={cusStyles.button} onPress={this.AlertWindow}>
             <Text style={styles.buttonText}>Sign out</Text>
           </TouchableOpacity>
         </View>
