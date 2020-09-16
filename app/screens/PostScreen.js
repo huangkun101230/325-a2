@@ -76,7 +76,7 @@ class PostScreen extends React.Component {
     this.setState(state);
   };
 
-  saveBoard = () => {
+  saveTask = () => {
     this.setState({
       isLoading: true,
     });
@@ -230,7 +230,7 @@ class PostScreen extends React.Component {
 
           <TouchableOpacity
             style={[styles.button, {backgroundColor: this.state.color}]}
-            onPress={this.saveBoard}>
+            onPress={this.saveTask}>
             <Text style={styles.buttonText}>Create!</Text>
           </TouchableOpacity>
 

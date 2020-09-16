@@ -5,7 +5,7 @@ import firebase from './../firebase';
 const SwitchNavigator = ({navigation}) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      navigation.navigate(user ? 'HomeNavigator' : 'AuthNavigator');
+      navigation.replace(user ? 'HomeNavigator' : 'AuthNavigator');
     });
   }, [navigation]);
 
