@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
@@ -109,8 +110,8 @@ class EditScreen extends React.Component {
             courseCode: event.courseCode,
             assiTitle: event.assiTitle,
             description: event.description,
-            startTime: event.startTime,
-            dueTime: event.dueTime,
+            startTime: new Date(event.startTime.seconds * 1000),
+            dueTime: new Date(event.dueTime.seconds * 1000),
             displayStartTime: event.displayStartTime,
             displayDueTime: event.displayDueTime,
             backgroundColor: event.backgroundColor,
@@ -133,7 +134,6 @@ class EditScreen extends React.Component {
     this.setState({
       isLoading: true,
     });
-    // const {navigation} = this.props;
     const updateRef = EventService.getEventDetail(this.state.key);
     updateRef
       .set({
@@ -157,6 +157,47 @@ class EditScreen extends React.Component {
         }));
       });
   }
+
+  checkTextInput = () => {
+    if (this.state.courseCode !== '') {
+      if (this.state.assiTitle !== '') {
+        if (this.state.startTime !== '') {
+          if (this.state.dueTime !== '') {
+            if (
+              this.state.dueTime.getTime() > this.state.startTime.getTime() &&
+              this.state.dueTime.getTime() > new Date().getTime()
+            ) {
+              this.updateTask();
+            } else {
+              this.alertWindow('Please select a valid due date');
+            }
+          } else {
+            this.alertWindow('Please select due date');
+          }
+        } else {
+          this.alertWindow('Please select start date');
+        }
+      } else {
+        this.alertWindow('Please enter task title');
+      }
+    } else {
+      this.alertWindow('please enter course code');
+    }
+  };
+
+  alertWindow = (text) => {
+    Alert.alert(
+      'Warning',
+      text,
+      [
+        {
+          text: 'Sure',
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -236,7 +277,7 @@ class EditScreen extends React.Component {
                 this.togglePickerShow();
                 this.setState((state) => ({
                   currentPickerTitle: 'Start Date',
-                  currentTime: new Date(this.state.startTime.seconds * 1000),
+                  currentTime: this.state.startTime,
                 }));
               }}>
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
@@ -253,9 +294,8 @@ class EditScreen extends React.Component {
                 this.togglePickerShow();
                 this.setState((state) => ({
                   currentPickerTitle: 'Due Date',
-                  currentTime: new Date(this.state.dueTime.seconds * 1000),
+                  currentTime: this.state.dueTime,
                 }));
-                console.log(this.state.currentTime);
               }}>
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
                 Due Date
@@ -280,7 +320,9 @@ class EditScreen extends React.Component {
               styles.button,
               {backgroundColor: this.state.backgroundColor},
             ]}
-            onPress={this.updateTask.bind(this)}>
+            onPress={() => {
+              this.checkTextInput();
+            }}>
             <Text style={styles.buttonText}>Update!</Text>
           </TouchableOpacity>
 

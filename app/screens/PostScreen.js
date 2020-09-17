@@ -46,8 +46,6 @@ class PostScreen extends React.Component {
       displayDueTime: '',
       currentPickerTitle: '',
       currentTime: '',
-      percent: '',
-      fillColor: '',
       backgroundColor: this.backgroundColors[0],
       isLoading: false,
       isVisible: false,
@@ -99,8 +97,6 @@ class PostScreen extends React.Component {
         displayStartTime: this.state.displayStartTime,
         displayDueTime: this.state.displayDueTime,
         backgroundColor: this.state.backgroundColor,
-        percent: '',
-        fillColor: '',
       })
       .then((docRef) => {
         this.resetState(); //reset the state elements
@@ -139,10 +135,37 @@ class PostScreen extends React.Component {
     return moment(date).format('MMM, Do YY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
   };
 
-  AlertWindow = (text) => {
+  checkTextInput = () => {
+    if (this.state.courseCode !== '') {
+      if (this.state.assiTitle !== '') {
+        if (this.state.startTime !== '') {
+          if (this.state.dueTime !== '') {
+            if (
+              this.state.dueTime.getTime() > this.state.startTime.getTime() &&
+              this.state.dueTime.getTime() > new Date().getTime()
+            ) {
+              this.saveTask();
+            } else {
+              this.alertWindow('Please select a valid due date');
+            }
+          } else {
+            this.alertWindow('Please select due date');
+          }
+        } else {
+          this.alertWindow('Please select start date');
+        }
+      } else {
+        this.alertWindow('Please enter task title');
+      }
+    } else {
+      this.alertWindow('please enter course code');
+    }
+  };
+
+  alertWindow = (text) => {
     Alert.alert(
       'Warning',
-      'You are going to remove this task',
+      text,
       [
         {
           text: 'Sure',
@@ -174,7 +197,7 @@ class PostScreen extends React.Component {
               <TextInput
                 placeholder={'Course Code'}
                 autoCapitalize="characters"
-                value={this.state.title}
+                value={this.state.courseCode}
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'courseCode')
                 }
@@ -194,7 +217,7 @@ class PostScreen extends React.Component {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TextInput
                 placeholder={'Task Title'}
-                value={this.state.title}
+                value={this.state.assiTitle}
                 onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
                 style={[
                   styles.input,
@@ -276,7 +299,9 @@ class PostScreen extends React.Component {
               styles.button,
               {backgroundColor: this.state.backgroundColor},
             ]}
-            onPress={this.saveTask}>
+            onPress={() => {
+              this.checkTextInput();
+            }}>
             <Text style={styles.buttonText}>Create!</Text>
           </TouchableOpacity>
 

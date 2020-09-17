@@ -53,7 +53,7 @@ class DetailScreen extends React.Component {
     this.props.navigation.navigate('ListScreen');
   };
 
-  AlertWindow = () => {
+  alertWindow = () => {
     Alert.alert(
       'Warning',
       'You are going to remove this task',
@@ -125,7 +125,7 @@ class DetailScreen extends React.Component {
           <View style={(styles.container, {flex: 1})}>
             <TouchableOpacity
               style={[styles.button, {backgroundColor: colors.red}]}
-              onPress={this.AlertWindow}>
+              onPress={this.alertWindow}>
               <Text style={styles.buttonText}>Remove</Text>
             </TouchableOpacity>
           </View>
