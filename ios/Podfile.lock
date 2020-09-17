@@ -336,7 +336,7 @@ PODS:
     - React
   - RNScreens (2.10.1):
     - React
-  - RNSVG (9.13.6):
+  - RNSVG (12.1.0):
     - React
   - RNVectorIcons (7.1.0):
     - React
@@ -551,7 +551,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
-  RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

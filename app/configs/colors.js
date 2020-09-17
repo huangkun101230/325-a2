@@ -4,11 +4,12 @@ export default {
   backgroundColor: '#F0EEF4', //warm white
   white: '#fff',
   gray: '#808080',
-  red: '#FF2600',
+  red: '#EA1F0A',
   input: '#161F3D', //dark blue
   addButtonColor: '#E9446A', //light red
   shadow: '#454d65', //gray blue
-  yellow: '#f5dd4b',
+  yellow: '#EAB700',
   black: '#000000',
   lightGray: '#BAB8BF',
+  green: '#00EA1A',
 };

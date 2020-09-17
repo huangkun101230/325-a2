@@ -39,7 +39,8 @@ class EditScreen extends React.Component {
       displayStartTime: '',
       displayDueTime: '',
       currentPickerTitle: '',
-      color: this.backgroundColors[0],
+      currentTime: '',
+      backgroundColor: this.backgroundColors[0],
       isLoading: true,
       isVisible: false,
       key: '',
@@ -55,17 +56,18 @@ class EditScreen extends React.Component {
       dueTime: '',
       displayStartTime: '',
       displayDueTime: '',
+      currentTime: '',
       isLoading: true,
     });
   }
 
   renderColors() {
-    return this.backgroundColors.map((color) => {
+    return this.backgroundColors.map((backgroundColor) => {
       return (
         <TouchableOpacity
-          key={color}
-          style={[cusStyles.colorSelect, {backgroundColor: color}]}
-          onPress={() => this.setState({color})}
+          key={backgroundColor}
+          style={[cusStyles.colorSelect, {backgroundColor: backgroundColor}]}
+          onPress={() => this.setState({backgroundColor})}
         />
       );
     });
@@ -93,7 +95,7 @@ class EditScreen extends React.Component {
   };
 
   formatDate = (date) => {
-    return moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
+    return moment(date).format('MMM, Do YY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
   };
 
   componentDidMount() {
@@ -111,7 +113,7 @@ class EditScreen extends React.Component {
             dueTime: event.dueTime,
             displayStartTime: event.displayStartTime,
             displayDueTime: event.displayDueTime,
-            color: event.color,
+            backgroundColor: event.backgroundColor,
             key: doc.id,
             isLoading: false,
           });
@@ -142,7 +144,7 @@ class EditScreen extends React.Component {
         dueTime: this.state.dueTime,
         displayStartTime: this.state.displayStartTime,
         displayDueTime: this.state.displayDueTime,
-        color: this.state.color,
+        backgroundColor: this.state.backgroundColor,
       })
       .then((docRef) => {
         this.resetState();
@@ -175,12 +177,15 @@ class EditScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'courseCode')
                 }
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
@@ -190,12 +195,15 @@ class EditScreen extends React.Component {
                 placeholder={'Task Title'}
                 value={this.state.assiTitle}
                 onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
@@ -209,22 +217,26 @@ class EditScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'description')
                 }
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
 
             <TouchableOpacity
-              style={[styles.input, {borderColor: this.state.color}]}
+              style={[styles.input, {borderColor: this.state.backgroundColor}]}
               onPress={() => {
                 this.togglePickerShow();
                 this.setState((state) => ({
                   currentPickerTitle: 'Start Date',
+                  currentTime: new Date(this.state.startTime.seconds * 1000),
                 }));
               }}>
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
@@ -236,10 +248,14 @@ class EditScreen extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.input, {borderColor: this.state.color}]}
+              style={[styles.input, {borderColor: this.state.backgroundColor}]}
               onPress={() => {
                 this.togglePickerShow();
-                this.setState((state) => ({currentPickerTitle: 'Due Date'}));
+                this.setState((state) => ({
+                  currentPickerTitle: 'Due Date',
+                  currentTime: new Date(this.state.dueTime.seconds * 1000),
+                }));
+                console.log(this.state.currentTime);
               }}>
               <Text style={[cusStyles.timeText, {color: colors.lightGray}]}>
                 Due Date
@@ -260,7 +276,10 @@ class EditScreen extends React.Component {
           </View>
 
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: this.state.color}]}
+            style={[
+              styles.button,
+              {backgroundColor: this.state.backgroundColor},
+            ]}
             onPress={this.updateTask.bind(this)}>
             <Text style={styles.buttonText}>Update!</Text>
           </TouchableOpacity>
@@ -290,6 +309,7 @@ class EditScreen extends React.Component {
         <View>
           {this.state.isVisible ? (
             <TimePicker
+              date={this.state.currentTime}
               pickerTitle={this.state.currentPickerTitle}
               toggleShow={this.togglePickerShow} //passing the function to the child
               onRef={(ref) => (this.parentReference = ref)}

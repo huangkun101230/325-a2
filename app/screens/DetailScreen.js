@@ -80,7 +80,10 @@ class DetailScreen extends React.Component {
 
     return (
       <ScrollView
-        style={[styles.container, {backgroundColor: this.state.event.color}]}>
+        style={[
+          styles.container,
+          {backgroundColor: this.state.event.backgroundColor},
+        ]}>
         <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
           <View style={cusStyles.subContainer}>
             <View>

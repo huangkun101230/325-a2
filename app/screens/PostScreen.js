@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
@@ -44,7 +45,10 @@ class PostScreen extends React.Component {
       displayStartTime: '',
       displayDueTime: '',
       currentPickerTitle: '',
-      color: this.backgroundColors[0],
+      currentTime: '',
+      percent: '',
+      fillColor: '',
+      backgroundColor: this.backgroundColors[0],
       isLoading: false,
       isVisible: false,
     };
@@ -64,12 +68,12 @@ class PostScreen extends React.Component {
   }
 
   renderColors() {
-    return this.backgroundColors.map((color) => {
+    return this.backgroundColors.map((backgroundColor) => {
       return (
         <TouchableOpacity
-          key={color}
-          style={[cusStyles.colorSelect, {backgroundColor: color}]}
-          onPress={() => this.setState({color})}
+          key={backgroundColor}
+          style={[cusStyles.colorSelect, {backgroundColor: backgroundColor}]}
+          onPress={() => this.setState({backgroundColor})}
         />
       );
     });
@@ -94,20 +98,11 @@ class PostScreen extends React.Component {
         dueTime: this.state.dueTime,
         displayStartTime: this.state.displayStartTime,
         displayDueTime: this.state.displayDueTime,
-        color: this.state.color,
+        backgroundColor: this.state.backgroundColor,
+        percent: '',
+        fillColor: '',
       })
       .then((docRef) => {
-        this.setState({
-          courseCode: '',
-          assiTitle: '',
-          description: '',
-          startTime: '',
-          dueTime: '',
-          displayStartTime: '',
-          displayDueTime: '',
-          color: '',
-          isLoading: false,
-        });
         this.resetState(); //reset the state elements
         this.props.closeModal(); //close this modal
       })
@@ -141,7 +136,21 @@ class PostScreen extends React.Component {
   };
 
   formatDate = (date) => {
-    return moment(date).format('MMM, Do YYYY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
+    return moment(date).format('MMM, Do YY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
+  };
+
+  AlertWindow = (text) => {
+    Alert.alert(
+      'Warning',
+      'You are going to remove this task',
+      [
+        {
+          text: 'Sure',
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
   render() {
@@ -169,12 +178,15 @@ class PostScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'courseCode')
                 }
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
@@ -184,12 +196,15 @@ class PostScreen extends React.Component {
                 placeholder={'Task Title'}
                 value={this.state.title}
                 onChangeText={(text) => this.updateTextInput(text, 'assiTitle')}
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
@@ -203,18 +218,21 @@ class PostScreen extends React.Component {
                 onChangeText={(text) =>
                   this.updateTextInput(text, 'description')
                 }
-                style={[styles.input, {borderColor: this.state.color}]}
+                style={[
+                  styles.input,
+                  {borderColor: this.state.backgroundColor},
+                ]}
               />
               <FontAwesomeIcon
                 icon={faClone}
                 size={32}
-                color={this.state.color}
+                color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
 
             <TouchableOpacity
-              style={[styles.input, {borderColor: this.state.color}]}
+              style={[styles.input, {borderColor: this.state.backgroundColor}]}
               onPress={() => {
                 this.togglePickerShow();
                 this.setState((state) => ({
@@ -230,7 +248,7 @@ class PostScreen extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.input, {borderColor: this.state.color}]}
+              style={[styles.input, {borderColor: this.state.backgroundColor}]}
               onPress={() => {
                 this.togglePickerShow();
                 this.setState((state) => ({currentPickerTitle: 'Due Date'}));
@@ -254,7 +272,10 @@ class PostScreen extends React.Component {
           </View>
 
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: this.state.color}]}
+            style={[
+              styles.button,
+              {backgroundColor: this.state.backgroundColor},
+            ]}
             onPress={this.saveTask}>
             <Text style={styles.buttonText}>Create!</Text>
           </TouchableOpacity>
@@ -284,6 +305,7 @@ class PostScreen extends React.Component {
         <View>
           {this.state.isVisible ? (
             <TimePicker
+              date={new Date()}
               pickerTitle={this.state.currentPickerTitle}
               toggleShow={this.togglePickerShow} //passing the function to the child
               onRef={(ref) => (this.parentReference = ref)}
