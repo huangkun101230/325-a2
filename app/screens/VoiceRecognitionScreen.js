@@ -4,69 +4,68 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
+  KeyboardAvoidingView,
   TouchableHighlight,
   ScrollView,
+  TouchableOpacity,
+  Switch,
 } from 'react-native';
 import colors from './../configs/colors';
 import Voice from 'react-native-voice';
-import Toggle from './../components/toggle';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faMicrophone,
   faTrashAlt,
-  faPauseCircle,
-  faStopCircle,
+  faClone,
+  faStop,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 class VoiceRecognition extends React.Component {
   state = {
     pitch: '',
     error: '',
-    end: '',
-    started: '',
     results: [],
     partialResults: [],
+    isReco: false,
     isEnglish: true,
-    currentLanguage: 'zh-CN', // en-US
+    currentLanguage: 'en-US', // zh-CN
+    currentResults: '',
   };
 
   constructor(props) {
     super(props);
     //Setting callbacks for the process status
-    Voice.onSpeechStart = this.onSpeechStart;
-    Voice.onSpeechEnd = this.onSpeechEnd;
-    Voice.onSpeechError = this.onSpeechError;
-    Voice.onSpeechResults = this.onSpeechResults;
-    Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-    Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
+    Voice.onSpeechError = this.onSpeechError.bind(this);
+    Voice.onSpeechResults = this.onSpeechResults.bind(this);
+    Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this);
+    Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged.bind(this);
   }
+
+  //show the time picker
+  toggleVoiceReco = () => {
+    this.setState((state) => ({isReco: !state.isReco}));
+  };
+
+  toggleIsEnglish = () => {
+    this.setState((state) => ({isEnglish: !state.isEnglish}));
+  };
+
+  toggleLanguage = () => {
+    this.state.isEnglish
+      ? this.setState((state) => ({currentLanguage: 'zh-CN'}))
+      : this.setState((state) => ({currentLanguage: 'en-US'}));
+  };
 
   componentWillUnmount() {
     //destroy the process after switching the screen
     Voice.destroy().then(Voice.removeAllListeners);
   }
 
-  onSpeechStart = (e) => {
-    //Invoked when .start() is called without error
-    console.log('onSpeechStart: ', e);
-    this.setState({
-      started: '111',
-    });
-  };
-
-  onSpeechEnd = (e) => {
-    //Invoked when SpeechRecognizer stops recognition
-    console.log('onSpeechEnd: ', e);
-    this.setState({
-      end: '111',
-    });
-  };
-
   onSpeechError = (e) => {
     //Invoked when an error occurs.
-    console.log('onSpeechError: ', e);
+    // console.log('onSpeechError: ', e);
     this.setState({
       error: JSON.stringify(e.error),
     });
@@ -74,7 +73,7 @@ class VoiceRecognition extends React.Component {
 
   onSpeechResults = (e) => {
     //Invoked when SpeechRecognizer is finished recognizing
-    console.log('onSpeechResults: ', e);
+    // console.log('onSpeechResults: ', e);
     this.setState({
       results: e.value,
     });
@@ -82,7 +81,7 @@ class VoiceRecognition extends React.Component {
 
   onSpeechPartialResults = (e) => {
     //Invoked when any results are computed
-    console.log('onSpeechPartialResults: ', e);
+    // console.log('onSpeechPartialResults: ', e);
     this.setState({
       partialResults: e.value,
     });
@@ -90,7 +89,7 @@ class VoiceRecognition extends React.Component {
 
   onSpeechVolumeChanged = (e) => {
     //Invoked when pitch that is recognized changed
-    console.log('onSpeechVolumeChanged: ', e);
+    console.log('onSpeechVolumeChanged: ', e.value);
     this.setState({
       pitch: e.value,
     });
@@ -101,12 +100,11 @@ class VoiceRecognition extends React.Component {
     this.setState({
       pitch: '',
       error: '',
-      started: '',
       results: [],
       partialResults: [],
-      end: '',
+      isReco: true,
     });
-
+    this.toggleLanguage();
     try {
       await Voice.start(this.state.currentLanguage);
     } catch (e) {
@@ -116,19 +114,13 @@ class VoiceRecognition extends React.Component {
 
   _stopRecognizing = async () => {
     //Stops listening for speech
+    this.setState({
+      isReco: false,
+    });
+
     try {
       await Voice.stop();
-      alert('Voice Recognization Stoped Here !!!');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  _cancelRecognizing = async () => {
-    //Cancels the speech recognition
-    try {
-      await Voice.cancel();
-      alert('Voice Recognization Cancelled !!!');
+      alert('Reco Stopped');
     } catch (e) {
       console.error(e);
     }
@@ -144,74 +136,116 @@ class VoiceRecognition extends React.Component {
     this.setState({
       pitch: '',
       error: '',
-      started: '',
       results: [],
       partialResults: [],
-      end: '',
+      isReco: false,
     });
+  };
+
+  playButton = () => {
+    return (
+      <View>
+        <TouchableHighlight
+          onPress={this._startRecognizing}
+          style={{marginVertical: 20}}>
+          <FontAwesomeIcon
+            icon={faMicrophone}
+            color={colors.primary}
+            size={81}
+            style={{alignSelf: 'center'}}
+          />
+        </TouchableHighlight>
+        <Text
+          style={{
+            textAlign: 'center',
+            color: '#B0171F',
+            marginBottom: 1,
+            fontWeight: '700',
+          }}>
+          Press mike to start Recognition
+        </Text>
+      </View>
+    );
+  };
+
+  stopButton = () => {
+    return (
+      <View>
+        <TouchableHighlight
+          onPress={this._stopRecognizing}
+          style={{marginVertical: 20}}>
+          <FontAwesomeIcon
+            icon={faStop}
+            color={colors.red}
+            size={81}
+            style={{alignSelf: 'center'}}
+          />
+        </TouchableHighlight>
+        <Text
+          style={{
+            textAlign: 'center',
+            color: '#B0171F',
+            marginBottom: 1,
+            fontWeight: '700',
+          }}>
+          Press to stop
+        </Text>
+      </View>
+    );
+  };
+
+  copyText = () => {
+    alert('Reco copied');
+    this.props.copyToParent(this.state.results);
+  };
+
+  getStatus = (status) => {
+    this.setState((state) => ({isEnglish: status}));
   };
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container}>
-          <Toggle />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingVertical: 10,
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                textAlign: 'center',
-                color: '#B0171F',
-              }}>{`Started: ${this.state.started}`}</Text>
-            <Text
-              style={{
-                flex: 1,
-                textAlign: 'center',
-                color: '#B0171F',
-              }}>{`End: ${this.state.end}`}</Text>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        <TouchableOpacity
+          style={{position: 'absolute', top: 64, right: 32}}
+          onPress={this.props.closeModal}>
+          <FontAwesomeIcon icon={faTimes} color={colors.black} size={24} />
+        </TouchableOpacity>
+
+        <View style={{flex: 1, marginTop: 100}}>
+          <View style={cusStyles.container}>
+            <Text style={{marginBottom: 8}}>Choose your language: </Text>
+
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={cusStyles.label}>
+                {this.state.isEnglish ? (
+                  <Text>English</Text>
+                ) : (
+                  <Text>Chinese</Text>
+                )}
+              </View>
+              <Switch
+                trackColor={{false: colors.shadow, true: colors.primary}}
+                thumbColor={this.state.isEnglish ? colors.white : colors.yellow}
+                ios_backgroundColor={colors.red}
+                onValueChange={this.toggleIsEnglish}
+                value={this.state.isEnglish}
+              />
+            </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingVertical: 10,
-            }}
-          />
+
           <Text style={styles.stat}>Results</Text>
           <ScrollView>
             {this.state.results.map((result, index) => {
               return (
-                <Text key={`result-${index}`} style={styles.stat}>
+                <Text key={`result-${index}`} style={styles.stat} selectable>
                   {result}
                 </Text>
               );
             })}
           </ScrollView>
           <ScrollView>
-            <TouchableHighlight
-              onPress={this._startRecognizing}
-              style={{marginVertical: 20}}>
-              <FontAwesomeIcon
-                icon={faMicrophone}
-                color={colors.primary}
-                size={81}
-                style={{alignSelf: 'center'}}
-              />
-            </TouchableHighlight>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: '#B0171F',
-                marginBottom: 1,
-                fontWeight: '700',
-              }}>
-              Press mike to start Recognition
-            </Text>
+            {this.state.isReco ? this.stopButton() : this.playButton()}
           </ScrollView>
 
           <View
@@ -221,32 +255,43 @@ class VoiceRecognition extends React.Component {
               position: 'absolute',
               bottom: 0,
             }}>
-            <TouchableHighlight
-              onPress={this._stopRecognizing}
-              style={{flex: 1, backgroundColor: 'grey'}}>
+            <TouchableHighlight //copy button
+              onPress={this.copyText}
+              style={{flex: 1, backgroundColor: 'grey', padding: 10}}>
               <FontAwesomeIcon
-                icon={faStopCircle}
+                icon={faClone}
                 color={colors.white}
-                size={64}
+                size={40}
                 style={{alignSelf: 'center'}}
               />
             </TouchableHighlight>
-            <TouchableHighlight
-              onPress={this._cancelRecognizing}
-              style={{flex: 1, backgroundColor: 'red'}}>
+            <TouchableHighlight //delete button
+              onPress={this._destroyRecognizer}
+              style={{flex: 1, backgroundColor: 'red', padding: 10}}>
               <FontAwesomeIcon
                 icon={faTrashAlt}
                 color={colors.white}
-                size={64}
+                size={40}
                 style={{alignSelf: 'center'}}
               />
             </TouchableHighlight>
           </View>
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }
+const cusStyles = StyleSheet.create({
+  container: {
+    flex: 0,
+    paddingVertical: 8,
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  label: {
+    marginRight: 10,
+  },
+});
 
 const styles = StyleSheet.create({
   button: {

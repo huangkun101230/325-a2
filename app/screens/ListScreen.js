@@ -7,13 +7,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Modal,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 import Title from '../components/title';
 import CircleTimer from './../components/circleTimer';
-import PostScreen from './PostScreen';
 import EventService from '../services/events/event.services';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -28,7 +26,6 @@ class ListScreen extends React.Component {
     this.state = {
       events: [],
       isLoading: true,
-      addTodoVisible: false,
       countingForRefreshing: 0,
     };
     this.intervalId = setInterval(() => {
@@ -41,11 +38,6 @@ class ListScreen extends React.Component {
       countingForRefreshing: this.state.countingForRefreshing + 1,
     }));
   }
-
-  //open PostScreen to add task
-  toggleAddTodoModal = () => {
-    this.setState((state) => ({addTodoVisible: !state.addTodoVisible}));
-  };
 
   onCollectionUpdate = async (querySnapshot) => {
     const events = [];
@@ -164,18 +156,11 @@ class ListScreen extends React.Component {
 
     return (
       <View style={cusStyles.container}>
-        <Modal
-          animationType="slide"
-          visible={this.state.addTodoVisible}
-          onRequestClose={() => this.toggleAddTodoModal()}>
-          <PostScreen closeModal={() => this.toggleAddTodoModal()} />
-        </Modal>
-
         <Title />
         <View style={{marginVertical: 48}}>
           <TouchableOpacity
             style={cusStyles.addList}
-            onPress={() => this.toggleAddTodoModal()}>
+            onPress={() => this.props.navigation.navigate('PostScreen')}>
             <FontAwesomeIcon
               icon={faPlus}
               color={colors.secondary}

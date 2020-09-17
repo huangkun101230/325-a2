@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
+  Modal,
 } from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
@@ -15,13 +16,10 @@ import EventService from '../services/events/event.services';
 import TimePicker from '../components/timePicker';
 import Loading from './../components/loading';
 import moment from 'moment';
+import VoiceRecognitionScreen from './VoiceRecognitionScreen';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faMicrophone,
-  faTimes,
-  faClone,
-} from '@fortawesome/free-solid-svg-icons';
+import {faMicrophone, faClone} from '@fortawesome/free-solid-svg-icons';
 
 class PostScreen extends React.Component {
   constructor(props) {
@@ -49,8 +47,15 @@ class PostScreen extends React.Component {
       backgroundColor: this.backgroundColors[0],
       isLoading: false,
       isVisible: false,
+      voiceRecoVisible: false,
+      copiedText: '',
     };
+    this.unsubscribe = null;
   }
+
+  componentDidMount = () => {
+    this.unsubscribe = this.copyToDesc();
+  };
 
   resetState() {
     this.setState({
@@ -62,6 +67,7 @@ class PostScreen extends React.Component {
       displayStartTime: '',
       displayDueTime: '',
       isLoading: false,
+      voiceRecoVisible: false,
     });
   }
 
@@ -100,7 +106,8 @@ class PostScreen extends React.Component {
       })
       .then((docRef) => {
         this.resetState(); //reset the state elements
-        this.props.closeModal(); //close this modal
+        // this.props.closeModal(); //close this modal
+        this.props.navigation.navigate('ListScreen');
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
@@ -176,6 +183,20 @@ class PostScreen extends React.Component {
     );
   };
 
+  //open PostScreen to add task
+  toggleVoiceRecoModal = () => {
+    this.setState((state) => ({voiceRecoVisible: !state.voiceRecoVisible}));
+  };
+
+  getCopiedData = (text) => {
+    this.setState((state) => ({copiedText: text}));
+  };
+
+  copyToDesc = () => {
+    // console.log(this.state.copiedText); //***** */
+    this.setState((state) => ({description: this.state.copiedText}));
+  };
+
   render() {
     if (this.state.isLoading) {
       <Loading />;
@@ -183,11 +204,16 @@ class PostScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView style={styles.centerContainer} behavior="padding">
-        <TouchableOpacity
-          style={{position: 'absolute', top: 64, right: 32}}
-          onPress={this.props.closeModal}>
-          <FontAwesomeIcon icon={faTimes} color={colors.black} size={24} />
-        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          visible={this.state.voiceRecoVisible}
+          onRequestClose={() => this.toggleVoiceRecoModal()}>
+          <VoiceRecognitionScreen
+            closeModal={() => this.toggleVoiceRecoModal()}
+            onRef={(ref) => (this.copyToParent = ref)}
+            copyToParent={this.getCopiedData.bind(this)}
+          />
+        </Modal>
 
         <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
           <Text style={cusStyles.title}>Create Task List</Text>
@@ -251,6 +277,11 @@ class PostScreen extends React.Component {
                 size={32}
                 color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
+                onPress={() => {
+                  this.copyToDesc();
+                  // this.updateTextInput(this.state.copiedText, 'description');
+                  // this.setState({description: this.state.copiedText});
+                }}
               />
             </View>
 
@@ -314,9 +345,7 @@ class PostScreen extends React.Component {
                 backgroundColor: colors.primary,
               },
             ]}
-            onPress={() =>
-              this.props.navigation.navigate('VoiceRecognitionScreen')
-            }>
+            onPress={() => this.toggleVoiceRecoModal()}>
             <FontAwesomeIcon
               icon={faMicrophone}
               color={colors.white}

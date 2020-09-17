@@ -44,6 +44,11 @@ const ListNavigator = () => {
         component={EditScreen}
         options={{headerTitle: false}}
       />
+      <ListStack.Screen
+        name="PostScreen"
+        component={PostScreen}
+        options={{headerTitle: false}}
+      />
     </ListStack.Navigator>
   );
 };
