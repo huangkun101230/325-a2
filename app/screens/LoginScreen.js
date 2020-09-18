@@ -5,10 +5,12 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faGoogle} from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 import AuthService from './../services/users/auth.services';
+import {statusCodes} from '@react-native-community/google-signin';
+import GoogleSignin from './../googleLogin';
 
 class LoginScreen extends React.Component {
     constructor() {
@@ -19,6 +21,23 @@ class LoginScreen extends React.Component {
             errorMessage: null,
         };
     }
+
+    googleSignIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+            } else {
+                // some other error happened
+            }
+        }
+    };
 
     handleLogin = () => {
         const { email, password } = this.state;
@@ -62,7 +81,7 @@ class LoginScreen extends React.Component {
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ alignSelf: 'center', marginTop: 32 }} onPress={()=> {this.props.navigation.navigate('RegisterScreen');}}>
+                    <TouchableOpacity style={{ alignSelf: 'center', marginTop: 32 }} onPress={() => { this.props.navigation.navigate('RegisterScreen'); }}>
                         <Text>New to Assignment Manager? <Text style={{ fontWeight: '500', color: colors.secondary }}>Sign up</Text>
                         </Text>
                     </TouchableOpacity>
@@ -73,8 +92,8 @@ class LoginScreen extends React.Component {
                         <View style={{ backgroundColor: colors.gray, height: 1, flex: 1, alignSelf: 'center' }} />
                     </View>
 
-                    <TouchableOpacity style={[styles.button, {flexDirection:'row', alignItems:'center'}]}>
-                        <FontAwesomeIcon icon={faGoogle} color={colors.white} size={24} style={{alignSelf: 'flex-start', marginRight: 25}} />
+                    <TouchableOpacity style={[styles.button, { flexDirection: 'row', alignItems: 'center' }]} onPress={this.googleSignIn}>
+                        <FontAwesomeIcon icon={faGoogle} color={colors.white} size={24} style={{ marginRight: 25 }} />
                         <Text style={styles.buttonText}>Continue with Google</Text>
                     </TouchableOpacity>
                 </View>

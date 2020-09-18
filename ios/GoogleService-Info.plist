@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>178012783535-v4923s1tu01k9k63jm1ibofi0o4j38np.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.178012783535-v4923s1tu01k9k63jm1ibofi0o4j38np</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBftca7qI-JtX-Z8P35Vi6fkmkrYm5bFGE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>178012783535</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.assimanager</string>
+	<key>PROJECT_ID</key>
+	<string>new-assimanager-a2-7eff6</string>
+	<key>STORAGE_BUCKET</key>
+	<string>new-assimanager-a2-7eff6.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:178012783535:ios:8e57a98248bb6e55ed655a</string>
+	<key>DATABASE_URL</key>
+	<string>https://new-assimanager-a2-7eff6.firebaseio.com</string>
+</dict>
+</plist>

@@ -6,6 +6,9 @@ import colors from '../configs/colors';
 import styles from '../configs/styles';
 import Loading from './../components/loading';
 
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faGoogle} from '@fortawesome/free-brands-svg-icons';
+
 import AuthService from './../services/users/auth.services';
 
 class RegisterScreen extends React.Component {
@@ -85,7 +88,8 @@ class RegisterScreen extends React.Component {
                         <View style={{ backgroundColor: colors.gray, height: 1, flex: 1, alignSelf: 'center' }} />
                     </View>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={[styles.button, {flexDirection:'row', alignItems:'center'}]}>
+                        <FontAwesomeIcon icon={faGoogle} color={colors.white} size={24} style={{marginRight: 25}} />
                         <Text style={styles.buttonText}>Continue with Google</Text>
                     </TouchableOpacity>
                 </View>

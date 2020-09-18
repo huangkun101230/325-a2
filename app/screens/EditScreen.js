@@ -15,6 +15,7 @@ import Loading from './../components/loading';
 import TimePicker from '../components/timePicker';
 import moment from 'moment';
 import EventService from '../services/events/event.services';
+import VoiceRecognitionScreen from './VoiceRecognitionScreen';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMicrophone, faClone} from '@fortawesome/free-solid-svg-icons';
@@ -223,12 +224,6 @@ class EditScreen extends React.Component {
                   {borderColor: this.state.backgroundColor},
                 ]}
               />
-              <FontAwesomeIcon
-                icon={faClone}
-                size={32}
-                color={this.state.backgroundColor}
-                style={{position: 'absolute', right: -28, top: 18}}
-              />
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -240,12 +235,6 @@ class EditScreen extends React.Component {
                   styles.input,
                   {borderColor: this.state.backgroundColor},
                 ]}
-              />
-              <FontAwesomeIcon
-                icon={faClone}
-                size={32}
-                color={this.state.backgroundColor}
-                style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
 
@@ -262,12 +251,6 @@ class EditScreen extends React.Component {
                   styles.input,
                   {borderColor: this.state.backgroundColor},
                 ]}
-              />
-              <FontAwesomeIcon
-                icon={faClone}
-                size={32}
-                color={this.state.backgroundColor}
-                style={{position: 'absolute', right: -28, top: 18}}
               />
             </View>
 
@@ -324,27 +307,6 @@ class EditScreen extends React.Component {
               this.checkTextInput();
             }}>
             <Text style={styles.buttonText}>Update!</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: colors.primary,
-              },
-            ]}
-            onPress={() =>
-              this.props.navigation.navigate('VoiceRecognitionScreen')
-            }>
-            <FontAwesomeIcon
-              icon={faMicrophone}
-              color={colors.white}
-              size={24}
-              style={{marginRight: 25}}
-            />
-            <Text style={styles.buttonText}>Voice Recognization</Text>
           </TouchableOpacity>
         </View>
 

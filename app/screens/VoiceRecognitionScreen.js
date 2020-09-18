@@ -50,6 +50,7 @@ class VoiceRecognition extends React.Component {
 
   toggleIsEnglish = () => {
     this.setState((state) => ({isEnglish: !state.isEnglish}));
+    this.toggleLanguage();
   };
 
   toggleLanguage = () => {
@@ -104,7 +105,6 @@ class VoiceRecognition extends React.Component {
       partialResults: [],
       isReco: true,
     });
-    this.toggleLanguage();
     try {
       await Voice.start(this.state.currentLanguage);
     } catch (e) {

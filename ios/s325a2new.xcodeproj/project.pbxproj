@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* s325a2newTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* s325a2newTests.m */; };
 		5EA72DA8350270F8B20E046B /* libPods-s325a2new-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF586CBAF50E3CF61B69BD7 /* libPods-s325a2new-tvOSTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BC27704A251399A700CE5E48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC277049251399A700CE5E48 /* GoogleService-Info.plist */; };
 		C1DE1D1BA833995DFFBE1EB1 /* libPods-s325a2new-s325a2newTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E1FB9F8894A445DADCA6F1 /* libPods-s325a2new-s325a2newTests.a */; };
 		D68BD53120245C1254A4B3F9 /* libPods-s325a2new.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66414BE54C90C2D94097CAAC /* libPods-s325a2new.a */; };
 		E9CCEB45073C2BA247371E02 /* libPods-s325a2new-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B77AA3DF3AD1B1A7FDFD32DA /* libPods-s325a2new-tvOS.a */; };
@@ -62,6 +63,7 @@
 		9A4C17D36DDCD2A9EFD031EF /* Pods-s325a2new-s325a2newTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-s325a2new-s325a2newTests.debug.xcconfig"; path = "Target Support Files/Pods-s325a2new-s325a2newTests/Pods-s325a2new-s325a2newTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B18A679814F498584DA850E5 /* Pods-s325a2new.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-s325a2new.release.xcconfig"; path = "Target Support Files/Pods-s325a2new/Pods-s325a2new.release.xcconfig"; sourceTree = "<group>"; };
 		B77AA3DF3AD1B1A7FDFD32DA /* libPods-s325a2new-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-s325a2new-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC277049251399A700CE5E48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BCDD477DBEEE9370E519C6D0 /* Pods-s325a2new.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-s325a2new.debug.xcconfig"; path = "Target Support Files/Pods-s325a2new/Pods-s325a2new.debug.xcconfig"; sourceTree = "<group>"; };
 		D33D39549E7DCE25B835DE13 /* Pods-s325a2new-s325a2newTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-s325a2new-s325a2newTests.release.xcconfig"; path = "Target Support Files/Pods-s325a2new-s325a2newTests/Pods-s325a2new-s325a2newTests.release.xcconfig"; sourceTree = "<group>"; };
 		E58E56E94F2D8748CBC6B383 /* Pods-s325a2new-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-s325a2new-tvOS.release.xcconfig"; path = "Target Support Files/Pods-s325a2new-tvOS/Pods-s325a2new-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* s325a2new */ = {
 			isa = PBXGroup;
 			children = (
+				BC277049251399A700CE5E48 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -194,7 +197,6 @@
 				7BC80B1EC14C2BED7DFDE0AF /* Pods-s325a2new-tvOSTests.debug.xcconfig */,
 				464849B9CDC5F1995E83EC76 /* Pods-s325a2new-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -253,6 +255,7 @@
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
 				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
+				77FE650C927F944D9310B219 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -343,6 +346,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				BC27704A251399A700CE5E48 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,6 +450,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		77FE650C927F944D9310B219 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-s325a2new-tvOS/Pods-s325a2new-tvOS-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-s325a2new-tvOS/Pods-s325a2new-tvOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D9294AA87D540C8FE33CBC66 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -475,6 +497,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-s325a2new/Pods-s325a2new-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -495,6 +518,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -547,6 +571,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-s325a2new-s325a2newTests/Pods-s325a2new-s325a2newTests-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -567,6 +592,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",

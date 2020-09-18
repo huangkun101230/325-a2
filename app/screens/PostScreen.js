@@ -50,12 +50,7 @@ class PostScreen extends React.Component {
       voiceRecoVisible: false,
       copiedText: '',
     };
-    this.unsubscribe = null;
   }
-
-  componentDidMount = () => {
-    this.unsubscribe = this.copyToDesc();
-  };
 
   resetState() {
     this.setState({
@@ -189,11 +184,10 @@ class PostScreen extends React.Component {
   };
 
   getCopiedData = (text) => {
-    this.setState((state) => ({copiedText: text}));
+    this.setState((state) => ({copiedText: text.toString()}));
   };
 
   copyToDesc = () => {
-    // console.log(this.state.copiedText); //***** */
     this.setState((state) => ({description: this.state.copiedText}));
   };
 
@@ -232,12 +226,6 @@ class PostScreen extends React.Component {
                   {borderColor: this.state.backgroundColor},
                 ]}
               />
-              <FontAwesomeIcon
-                icon={faClone}
-                size={32}
-                color={this.state.backgroundColor}
-                style={{position: 'absolute', right: -28, top: 18}}
-              />
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -250,12 +238,6 @@ class PostScreen extends React.Component {
                   {borderColor: this.state.backgroundColor},
                 ]}
               />
-              <FontAwesomeIcon
-                icon={faClone}
-                size={32}
-                color={this.state.backgroundColor}
-                style={{position: 'absolute', right: -28, top: 18}}
-              />
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -264,9 +246,7 @@ class PostScreen extends React.Component {
                 numberOfLines={4}
                 placeholder={'Description'}
                 value={this.state.description}
-                onChangeText={(text) =>
-                  this.updateTextInput(text, 'description')
-                }
+                onChangeText={(description) => this.setState({description})}
                 style={[
                   styles.input,
                   {borderColor: this.state.backgroundColor},
@@ -279,8 +259,6 @@ class PostScreen extends React.Component {
                 style={{position: 'absolute', right: -28, top: 18}}
                 onPress={() => {
                   this.copyToDesc();
-                  // this.updateTextInput(this.state.copiedText, 'description');
-                  // this.setState({description: this.state.copiedText});
                 }}
               />
             </View>

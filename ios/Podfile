@@ -3,10 +3,16 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
+pod 'GoogleSignIn', '~> 5.0.2'
+
 target 's325a2new' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+
+
+  # add pods for desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
 
   target 's325a2newTests' do
     inherit! :complete
