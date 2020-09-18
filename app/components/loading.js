@@ -1,3 +1,8 @@
+/*
+This component allows us to implement the activity indicator
+This is been used during the loading process
+*/
+
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import colors from './../configs/colors';

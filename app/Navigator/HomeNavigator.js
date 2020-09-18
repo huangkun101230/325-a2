@@ -1,8 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
+/*
+This is the Home navigator
+It has five screens: ListScreen, PostScreen, DetailScreen, EditScreen, ProfileScreen
+This is been used in the AppNavigator.js
+*/
+
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import colors from '../configs/colors';
-import styles from '../configs/styles';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -17,8 +23,8 @@ import ListScreen from './../screens/ListScreen';
 import EditScreen from './../screens/EditScreen';
 import DetailScreen from './../screens/DetailScreen';
 
-const HomeStack = createBottomTabNavigator();
-const ListStack = createStackNavigator();
+const HomeStack = createBottomTabNavigator(); //bottom tabs
+const ListStack = createStackNavigator(); //main tab of the bottom tab bar
 
 const ListNavigator = () => {
   return (
@@ -58,18 +64,15 @@ const HomeNavigator = () => {
     <HomeStack.Navigator
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => {
+          //give bottom tab icon
           if (route.name === 'ListNavigator') {
-            // eslint-disable-next-line prettier/prettier
-            return (
-              <FontAwesomeIcon icon={faListAlt} color={color} size={32} />
-            );
+            return <FontAwesomeIcon icon={faListAlt} color={color} size={32} />;
           } else if (route.name === 'PostScreen') {
             return (
               <FontAwesomeIcon
                 icon={faPlusCircle}
                 color={colors.addButtonCOlor}
                 size={48}
-                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   shadowColor: colors.addButtonCOlor,
                   shadowOffset: {width: 0, height: 0},
@@ -90,7 +93,6 @@ const HomeNavigator = () => {
         showLabel: false,
       }}>
       <HomeStack.Screen name="ListNavigator" component={ListNavigator} />
-      {/* <HomeStack.Screen name="PostScreen" component={PostScreen} /> */}
       <HomeStack.Screen name="ProfileScreen" component={ProfileScreen} />
     </HomeStack.Navigator>
   );

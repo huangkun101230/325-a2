@@ -1,3 +1,9 @@
+/*
+This is the firebase config and initialize file
+This is been used with any services and switchNavigator
+It returns an initialized firebase object
+*/
+
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';

@@ -1,3 +1,10 @@
+/*
+This is the eventServices
+This is been used with any scrren that requires event services
+It allows user to create, remove, get event list and details from the firebase
+It returns a new eventService object
+*/
+
 import firebase from '../../firebase';
 
 class eventService {
@@ -22,10 +29,6 @@ class eventService {
 
   getEventDetail(eventId: string): firebase.firestore.DocumentReference {
     return this.eventListRef.doc(eventId);
-  }
-
-  getUserId() {
-    return this.currentUser.uid;
   }
 }
 

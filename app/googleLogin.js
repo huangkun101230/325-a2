@@ -1,3 +1,10 @@
+/*
+This is the google sign in config and initialize file
+This is been used in the loginScreen
+It returns an initialized GoogleSignin object
+THIS IS NOT COMPLETED.
+*/
+
 import {GoogleSignin} from '@react-native-community/google-signin';
 
 GoogleSignin.configure({

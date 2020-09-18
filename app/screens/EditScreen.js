@@ -1,4 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
+/*
+This is the EditScreen
+This is been linked with DetailScreen and accessed eventID from it.
+It allows user to modify event details
+It uses timerPicker, loading, moment compoent
+It uses color and syles config form the config folder
+It is using functions provided by the EventSerice
+*/
+
 import React from 'react';
 import {
   StyleSheet,
@@ -15,14 +24,11 @@ import Loading from './../components/loading';
 import TimePicker from '../components/timePicker';
 import moment from 'moment';
 import EventService from '../services/events/event.services';
-import VoiceRecognitionScreen from './VoiceRecognitionScreen';
-
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMicrophone, faClone} from '@fortawesome/free-solid-svg-icons';
 
 class EditScreen extends React.Component {
   constructor() {
     super();
+    //those 7 colors are for selecting event theme color
     this.backgroundColors = [
       '#5cd859',
       '#24a6d9',
@@ -36,16 +42,16 @@ class EditScreen extends React.Component {
       courseCode: '',
       assiTitle: '',
       description: '',
-      startTime: '',
+      startTime: '', //start time in UTC format.getTime() format
       dueTime: '',
-      displayStartTime: '',
+      displayStartTime: '', //display start time in string formatted format
       displayDueTime: '',
-      currentPickerTitle: '',
-      currentTime: '',
+      currentPickerTitle: '', //the current picker title which will pass to the timePicker component
+      currentTime: '', //current time stored in the firebase (not the actual current time)
       backgroundColor: this.backgroundColors[0],
-      isLoading: true,
-      isVisible: false,
-      key: '',
+      isLoading: true, //for displaying the loading indicator
+      isVisible: false, //for displaying the time picker
+      key: '', //current event key/id
     };
   }
 
@@ -63,6 +69,8 @@ class EditScreen extends React.Component {
     });
   }
 
+  //seven color theme for selecting
+  //this will change the this.state.backgroundColor
   renderColors() {
     return this.backgroundColors.map((backgroundColor) => {
       return (
@@ -76,11 +84,12 @@ class EditScreen extends React.Component {
   }
 
   //show the time picker
+  //change this.state.isVisible
   togglePickerShow = () => {
     this.setState((state) => ({isVisible: !state.isVisible}));
   };
 
-  //get date returned from time picker component
+  //get date returned from child time picker component
   getDate = (date) => {
     const formattedDate = this.formatDate(date);
     if (this.state.currentPickerTitle === 'Start Date') {
@@ -96,10 +105,16 @@ class EditScreen extends React.Component {
     }
   };
 
+  //change date from UTC to sepcific display format
   formatDate = (date) => {
     return moment(date).format('MMM, Do YY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
   };
 
+  /**
+   * get the exisiting data from the firebase EventService
+   * read the document referred by this documentReference (id passed from DetailScreen) and wait for OK signal
+   * @param {object} doc - specificEventSnapshot data used after exists
+   */
   componentDidMount() {
     const itemKey = this.props.route.params.itemKey;
     EventService.getEventDetail(itemKey)
@@ -125,12 +140,14 @@ class EditScreen extends React.Component {
       });
   }
 
+  //update textinput to specif state
   updateTextInput = (text, field) => {
     const state = this.state;
     state[field] = text;
     this.setState(state);
   };
 
+  //update details with the current value in the state
   updateTask() {
     this.setState({
       isLoading: true,
@@ -159,6 +176,11 @@ class EditScreen extends React.Component {
       });
   }
 
+  /*If the courseCode != null, assiTitle != null, startTime != null, dueTime != null,
+  duetime grater than start time and current time, then
+  updateTask, otherwise
+  give an alert
+  */
   checkTextInput = () => {
     if (this.state.courseCode !== '') {
       if (this.state.assiTitle !== '') {
@@ -186,6 +208,7 @@ class EditScreen extends React.Component {
     }
   };
 
+  //alert window will display different message with input.
   alertWindow = (text) => {
     Alert.alert(
       'Warning',
@@ -201,10 +224,12 @@ class EditScreen extends React.Component {
   };
 
   render() {
+    //show the loading avtivity indicator if it's loading
     if (this.state.isLoading) {
       <Loading />;
     }
 
+    //the following will display the details of the event, such as course code, assi titile, description, etc.
     return (
       <KeyboardAvoidingView style={styles.centerContainer} behavior="padding">
         <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
@@ -313,11 +338,11 @@ class EditScreen extends React.Component {
         <View>
           {this.state.isVisible ? (
             <TimePicker
-              date={this.state.currentTime}
-              pickerTitle={this.state.currentPickerTitle}
+              date={this.state.currentTime} //passing existing date
+              pickerTitle={this.state.currentPickerTitle} //current title such as start date or due date
               toggleShow={this.togglePickerShow} //passing the function to the child
               onRef={(ref) => (this.parentReference = ref)}
-              parentReference={this.getDate.bind(this)}
+              parentReference={this.getDate.bind(this)} //get date data from the time picker
             />
           ) : null}
         </View>

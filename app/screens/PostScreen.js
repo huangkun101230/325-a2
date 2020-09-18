@@ -1,4 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
+/*
+This is the PostScreen
+This is been linked with ListScreen and VoiceRecognitionScreen
+It allows user to post new event
+It uses timerPicker, loading, moment compoent
+It uses color and syles config form the config folder
+It is using functions provided by the EventSerice
+It uses the icon from fontawesome
+*/
+
 import React from 'react';
 import {
   StyleSheet,
@@ -24,6 +34,7 @@ import {faMicrophone, faClone} from '@fortawesome/free-solid-svg-icons';
 class PostScreen extends React.Component {
   constructor(props) {
     super(props);
+    //those 7 colors are for selecting event theme color
     this.backgroundColors = [
       '#5cd859',
       '#24a6d9',
@@ -38,15 +49,15 @@ class PostScreen extends React.Component {
       courseCode: '',
       assiTitle: '',
       description: '',
-      startTime: '',
+      startTime: '', //start time in UTC format.getTime() format
       dueTime: '',
-      displayStartTime: '',
+      displayStartTime: '', //display start time in string formatted format
       displayDueTime: '',
-      currentPickerTitle: '',
-      currentTime: '',
+      currentPickerTitle: '', //the current picker title which will pass to the timePicker component
+      currentTime: '', //current time stored in the firebase (not the actual current time)
       backgroundColor: this.backgroundColors[0],
-      isLoading: false,
-      isVisible: false,
+      isLoading: false, //for displaying the loading indicator
+      isVisible: false, //for displaying the time picker
       voiceRecoVisible: false,
       copiedText: '',
     };
@@ -66,6 +77,8 @@ class PostScreen extends React.Component {
     });
   }
 
+  //seven color theme for selecting
+  //this will change the this.state.backgroundColor
   renderColors() {
     return this.backgroundColors.map((backgroundColor) => {
       return (
@@ -78,12 +91,14 @@ class PostScreen extends React.Component {
     });
   }
 
+  //update textinput to specif state
   updateTextInput = (text, field) => {
     const state = this.state;
     state[field] = text;
     this.setState(state);
   };
 
+  //save a new task with the current value in the state
   saveTask = () => {
     this.setState({
       isLoading: true,
@@ -112,12 +127,12 @@ class PostScreen extends React.Component {
       });
   };
 
-  //show the time picker
+  //change the state for showing the time picker or not
   togglePickerShow = () => {
     this.setState((state) => ({isVisible: !state.isVisible}));
   };
 
-  //get date returned from time picker component
+  //get date returned from the child time picker component
   getDate = (date) => {
     const formattedDate = this.formatDate(date);
     if (this.state.currentPickerTitle === 'Start Date') {
@@ -133,10 +148,16 @@ class PostScreen extends React.Component {
     }
   };
 
+  //change date from UTC to sepcific display format
   formatDate = (date) => {
     return moment(date).format('MMM, Do YY HH:mm'); //format date e.g. 'Sep, 16th 2020 19:50'
   };
 
+  /*If the courseCode != null, assiTitle != null, startTime != null, dueTime != null,
+  duetime grater than start time and current time, then
+  updateTask, otherwise
+  give an alert
+  */
   checkTextInput = () => {
     if (this.state.courseCode !== '') {
       if (this.state.assiTitle !== '') {
@@ -164,6 +185,7 @@ class PostScreen extends React.Component {
     }
   };
 
+  //alert window will display different message with input.
   alertWindow = (text) => {
     Alert.alert(
       'Warning',
@@ -178,33 +200,41 @@ class PostScreen extends React.Component {
     );
   };
 
-  //open PostScreen to add task
+  //change the state for openning the VoiceReco or not
   toggleVoiceRecoModal = () => {
     this.setState((state) => ({voiceRecoVisible: !state.voiceRecoVisible}));
   };
 
+  //get date returned from child time picker component
   getCopiedData = (text) => {
     this.setState((state) => ({copiedText: text.toString()}));
   };
 
+  //set the state.description data with the copiedText data
   copyToDesc = () => {
     this.setState((state) => ({description: this.state.copiedText}));
   };
 
   render() {
+    //show the loading avtivity indicator if it's loading
     if (this.state.isLoading) {
       <Loading />;
     }
 
     return (
       <KeyboardAvoidingView style={styles.centerContainer} behavior="padding">
+        {/* open the voiceRecognition screen modal and passing functions to it */}
         <Modal
           animationType="slide"
+          // on and off
           visible={this.state.voiceRecoVisible}
+          // turn it on or off
           onRequestClose={() => this.toggleVoiceRecoModal()}>
           <VoiceRecognitionScreen
+            // closeModal() is passed to the child component, it can be used there to close it
             closeModal={() => this.toggleVoiceRecoModal()}
             onRef={(ref) => (this.copyToParent = ref)}
+            // copyToParent() is passed to the child component, it can be used there to pass data
             copyToParent={this.getCopiedData.bind(this)}
           />
         </Modal>
@@ -257,6 +287,7 @@ class PostScreen extends React.Component {
                 size={32}
                 color={this.state.backgroundColor}
                 style={{position: 'absolute', right: -28, top: 18}}
+                // copy the reco text to the description TextInput field
                 onPress={() => {
                   this.copyToDesc();
                 }}
@@ -337,11 +368,11 @@ class PostScreen extends React.Component {
         <View>
           {this.state.isVisible ? (
             <TimePicker
-              date={new Date()}
-              pickerTitle={this.state.currentPickerTitle}
+              date={new Date()} //passing current date
+              pickerTitle={this.state.currentPickerTitle} //current title such as start date or due date
               toggleShow={this.togglePickerShow} //passing the function to the child
               onRef={(ref) => (this.parentReference = ref)}
-              parentReference={this.getDate.bind(this)}
+              parentReference={this.getDate.bind(this)} //get date data from the time picker
             />
           ) : null}
         </View>

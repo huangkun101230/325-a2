@@ -1,3 +1,10 @@
+/*
+This is the ProfileScreen
+This is been linked with HomeNavigator
+It uses color and syles config form the config folder
+It is using functions provided by the authServices and ProfileService
+*/
+
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import colors from '../configs/colors';

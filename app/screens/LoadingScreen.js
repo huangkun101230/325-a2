@@ -1,3 +1,10 @@
+/*
+This is the LoadingScreen
+It will show up when before the switch navigator decided to go to which navigator
+It uses title compoent
+It uses color config form the config folder
+*/
+
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import colors from '../configs/colors';

@@ -1,3 +1,10 @@
+/*
+This is the authServices
+This is been used with any scrren that requires auth services
+It allows user to login and signup from the firebase
+It returns a new authService object
+*/
+
 import firebase from '../../firebase';
 
 class authService {

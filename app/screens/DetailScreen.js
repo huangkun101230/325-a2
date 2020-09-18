@@ -1,17 +1,26 @@
+/* eslint-disable react-native/no-inline-styles */
+/*
+This is the DetailScreen
+This is been linked with ListScreen and accessed eventID from it.
+It allows user to remove event or edit the event (which will link to EditScreen)
+It will show loading indicator when it's loading
+It uses color and syles config form the config folder
+It is using functions provided by the EventSerice
+*/
+
 import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  ActivityIndicator,
   ScrollView,
-  Button,
   Alert,
 } from 'react-native';
 
 import colors from '../configs/colors';
 import styles from '../configs/styles';
+import Loading from './../components/loading';
 import EventService from '../services/events/event.services';
 
 class DetailScreen extends React.Component {
@@ -25,8 +34,15 @@ class DetailScreen extends React.Component {
     };
   }
 
+  /**
+   * To get the event detail, we must:
+   * read the document referred by this documentReference (id passed from ListScrren) and wait for OK signal
+   * @param {object} doc - specificEventSnapshot data used after exists
+   */
   componentDidMount() {
+    //get this event key from ListScreen
     const itemKey = this.props.route.params.itemKey;
+    //get details from the EventService
     EventService.getEventDetail(itemKey)
       .get()
       .then((doc) => {
@@ -42,17 +58,20 @@ class DetailScreen extends React.Component {
       });
   }
 
+  //jump to the Editscreen and pass this event id to that page
   handleEdit = () => {
     this.props.navigation.navigate('EditScreen', {
       itemKey: this.state.key,
     });
   };
 
+  //remove this event and jump back to the ListScreen
   handleRemove = () => {
     EventService.removeEvent(this.state.key);
     this.props.navigation.navigate('ListScreen');
   };
 
+  //alertWindow for removing event
   alertWindow = () => {
     Alert.alert(
       'Warning',
@@ -60,7 +79,6 @@ class DetailScreen extends React.Component {
       [
         {
           text: 'Cancel',
-          // onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {text: 'OK', onPress: () => this.handleRemove()},
@@ -70,14 +88,12 @@ class DetailScreen extends React.Component {
   };
 
   render() {
+    //show the loading avtivity indicator if it's loading
     if (this.state.isLoading) {
-      return (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      );
+      return <Loading />;
     }
 
+    //the following will display the details of the event, such as course code, assi titile, description, etc.
     return (
       <ScrollView
         style={[
@@ -125,6 +141,7 @@ class DetailScreen extends React.Component {
           <View style={(styles.container, {flex: 1})}>
             <TouchableOpacity
               style={[styles.button, {backgroundColor: colors.red}]}
+              //will pop up an alert window if you want to remove it
               onPress={this.alertWindow}>
               <Text style={styles.buttonText}>Remove</Text>
             </TouchableOpacity>

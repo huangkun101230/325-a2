@@ -1,4 +1,13 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
+/*
+This is the VoiceRecognitionScreen
+This is been linked with postScreen
+It allows user to use the voiceRecognition within two different languages, English and Chinese
+It uses color config form the config folder
+It uses the icon from fontawesome
+*/
+
 import React from 'react';
 import {
   StyleSheet,
@@ -24,11 +33,11 @@ import {
 
 class VoiceRecognition extends React.Component {
   state = {
-    pitch: '',
+    pitch: '', //detect volumn changed
     error: '',
-    results: [],
-    partialResults: [],
-    isReco: false,
+    results: [], //final results
+    partialResults: [], //when speak stops, it is a partialResults
+    isReco: false, //if it is listening
     isEnglish: true,
     currentLanguage: 'en-US', // zh-CN
     currentResults: '',
@@ -43,16 +52,18 @@ class VoiceRecognition extends React.Component {
     Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged.bind(this);
   }
 
-  //show the time picker
+  //change the state for showing the time voiceReco or not
   toggleVoiceReco = () => {
     this.setState((state) => ({isReco: !state.isReco}));
   };
 
+  //change the state for the language toggle and also change the current language
   toggleIsEnglish = () => {
     this.setState((state) => ({isEnglish: !state.isEnglish}));
     this.toggleLanguage();
   };
 
+  //change current language
   toggleLanguage = () => {
     this.state.isEnglish
       ? this.setState((state) => ({currentLanguage: 'zh-CN'}))
@@ -65,7 +76,7 @@ class VoiceRecognition extends React.Component {
   }
 
   onSpeechError = (e) => {
-    //Invoked when an error occurs.
+    //invoked when an error occurs.
     // console.log('onSpeechError: ', e);
     this.setState({
       error: JSON.stringify(e.error),
@@ -73,7 +84,7 @@ class VoiceRecognition extends React.Component {
   };
 
   onSpeechResults = (e) => {
-    //Invoked when SpeechRecognizer is finished recognizing
+    //invoked when SpeechRecognizer is finished recognizing
     // console.log('onSpeechResults: ', e);
     this.setState({
       results: e.value,
@@ -81,7 +92,7 @@ class VoiceRecognition extends React.Component {
   };
 
   onSpeechPartialResults = (e) => {
-    //Invoked when any results are computed
+    //invoked when any results are computed
     // console.log('onSpeechPartialResults: ', e);
     this.setState({
       partialResults: e.value,
@@ -89,7 +100,7 @@ class VoiceRecognition extends React.Component {
   };
 
   onSpeechVolumeChanged = (e) => {
-    //Invoked when pitch that is recognized changed
+    //invoked when pitch that is recognized changed
     console.log('onSpeechVolumeChanged: ', e.value);
     this.setState({
       pitch: e.value,
@@ -97,7 +108,7 @@ class VoiceRecognition extends React.Component {
   };
 
   _startRecognizing = async () => {
-    //Starts listening for speech for a specific locale
+    //starts listening for speech for a specific locale
     this.setState({
       pitch: '',
       error: '',
@@ -113,7 +124,7 @@ class VoiceRecognition extends React.Component {
   };
 
   _stopRecognizing = async () => {
-    //Stops listening for speech
+    //stops listening for speech
     this.setState({
       isReco: false,
     });
@@ -127,7 +138,7 @@ class VoiceRecognition extends React.Component {
   };
 
   _destroyRecognizer = async () => {
-    //Destroys the current SpeechRecognizer instance
+    //destroys the current SpeechRecognizer instance
     try {
       await Voice.destroy();
     } catch (e) {
@@ -194,6 +205,7 @@ class VoiceRecognition extends React.Component {
     );
   };
 
+  //give an alert and passing the reco data to the postScreen.
   copyText = () => {
     alert('Reco copied');
     this.props.copyToParent(this.state.results);
@@ -206,6 +218,7 @@ class VoiceRecognition extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        {/* top right closing button */}
         <TouchableOpacity
           style={{position: 'absolute', top: 64, right: 32}}
           onPress={this.props.closeModal}>
@@ -213,6 +226,7 @@ class VoiceRecognition extends React.Component {
         </TouchableOpacity>
 
         <View style={{flex: 1, marginTop: 100}}>
+          {/* top language toggle */}
           <View style={cusStyles.container}>
             <Text style={{marginBottom: 8}}>Choose your language: </Text>
 
@@ -281,12 +295,12 @@ class VoiceRecognition extends React.Component {
     );
   }
 }
+
 const cusStyles = StyleSheet.create({
   container: {
     flex: 0,
     paddingVertical: 8,
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   label: {
     marginRight: 10,

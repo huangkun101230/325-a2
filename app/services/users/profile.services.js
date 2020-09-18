@@ -1,3 +1,10 @@
+/*
+This is the profileServices
+This is been used with any scrren that requires user pforile services
+It allows user to get user proifle, update name, email and password and return user id from the firebase
+It returns a new profile Service object
+*/
+
 import firebase from './../../firebase';
 
 class profileService {

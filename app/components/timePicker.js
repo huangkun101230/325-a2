@@ -1,3 +1,9 @@
+/*
+This component allows us to implement the date time picker
+slide from bottom, display as the normal ios time picker
+This is been used in the PostScreen and EditScreen for choosing start date and due date
+*/
+
 import React from 'react';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 

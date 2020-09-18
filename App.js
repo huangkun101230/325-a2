@@ -1,9 +1,7 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
+ * Welcome to my s325 a2 app - Individual
+ * This is the starter of the Assignment Manager app.
+ * It is conneting to the AppNavigator inside the Navigator folder
  */
 
 import React from 'react';

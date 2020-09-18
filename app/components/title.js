@@ -1,4 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
+/*
+This component allows us to display the title of this app
+-- AssignmentManager --
+This is been used in the LoadingScreen and ListScreen
+*/
+
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import colors from './../configs/colors';

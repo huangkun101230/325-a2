@@ -1,17 +1,22 @@
+/* eslint-disable radix */
 /* eslint-disable react-native/no-inline-styles */
+/*
+This is the ListScreen
+It linked with PostScreen and DetailScreen
+It displays all the events and allows user to swip horizontally to view events
+It uses loading, circleTimer, and title compoent
+It uses color and syles config form the config folder
+It is using functions provided by the EventSerice
+It uses the icon from fontawesome
+*/
+
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import colors from '../configs/colors';
 import styles from '../configs/styles';
 import Title from '../components/title';
 import CircleTimer from './../components/circleTimer';
+import Loading from './../components/loading';
 import EventService from '../services/events/event.services';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -28,17 +33,20 @@ class ListScreen extends React.Component {
       isLoading: true,
       countingForRefreshing: 0,
     };
+    //counting numbers for refreshing
     this.intervalId = setInterval(() => {
       this.counting();
     }, 1000);
   }
 
+  //counting numbers for refreshing
   counting() {
     this.setState((state) => ({
       countingForRefreshing: this.state.countingForRefreshing + 1,
     }));
   }
 
+  //update event if there is any chages
   onCollectionUpdate = async (querySnapshot) => {
     const events = [];
     querySnapshot.forEach((doc) => {
@@ -71,6 +79,7 @@ class ListScreen extends React.Component {
     });
   };
 
+  //set up subscription with event colletcion update
   componentDidMount = () => {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   };
@@ -84,14 +93,17 @@ class ListScreen extends React.Component {
     clearInterval(this.intervalId);
   };
 
+  //render each event insaid the horizontal list
   renderList = (list) => {
     let stringPercent, fillColor, percent, remainingTime;
+    //change the time from seconds to millisecionds
     const endTime = list.dueTime.seconds * 1000;
     const startTime = list.startTime.seconds * 1000;
     const totalTime = endTime - startTime;
 
     let now = new Date().getTime();
 
+    //set time restrictions
     let diffNowAndEnd = endTime - now;
     if (now < startTime) {
       remainingTime = totalTime;
@@ -101,6 +113,7 @@ class ListScreen extends React.Component {
       remainingTime = 0;
     }
 
+    //set color restrictions
     percent = (remainingTime / totalTime) * 100;
     stringPercent = parseInt(percent.toString()).toString();
     if (percent <= 100 && percent >= 66) {
@@ -111,6 +124,7 @@ class ListScreen extends React.Component {
       fillColor = colors.red;
     }
 
+    //display timeCircleProgress bar, coursecode, title and due date of the events.
     return (
       <TouchableOpacity
         style={[
@@ -118,6 +132,7 @@ class ListScreen extends React.Component {
           {backgroundColor: list.backgroundColor},
         ]}
         onPress={() => {
+          //passing this event key to the detailScreen
           this.props.navigation.navigate('DetailScreen', {
             itemKey: list.key,
           });
@@ -146,18 +161,16 @@ class ListScreen extends React.Component {
   };
 
   render() {
+    //show the loading avtivity indicator if it's loading
     if (this.state.isLoading) {
-      return (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      );
+      return <Loading />;
     }
 
     return (
       <View style={cusStyles.container}>
         <Title />
         <View style={{marginVertical: 48}}>
+          {/* add event button */}
           <TouchableOpacity
             style={cusStyles.addList}
             onPress={() => this.props.navigation.navigate('PostScreen')}>
@@ -176,6 +189,7 @@ class ListScreen extends React.Component {
           <Text style={cusStyles.add}>Add Task</Text>
         </View>
 
+        {/* reanding each event in the flatList */}
         <View style={{height: 275, paddingLeft: 32}}>
           <FlatList
             data={this.state.events}
